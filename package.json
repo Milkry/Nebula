@@ -6,7 +6,11 @@
     "@discordjs/voice": "^0.8.0",
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.6.0",
+    "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^4.4.1",
+    "install": "^0.13.0",
+    "libsodium-wrappers": "^0.7.9",
+    "npm": "^8.4.0",
     "ytdl-core": "^4.10.0"
   },
   "name": "discord-bot",
