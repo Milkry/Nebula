@@ -1,68 +1,40 @@
-// Require the necessary discord.js classes
-const { Client, Collection, Intents, Interaction } = require('discord.js');
-const { token } = require('./config.json');
-const ytdl = require('ytdl-core');
-const {
-	AudioPlayerStatus,
-	StreamType,
-	createAudioPlayer,
-	createAudioResource,
-	joinVoiceChannel,
-} = require('@discordjs/voice');
+//////////////////////////////////////////////////////////////
+const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
+const config = require("./config.json");
+//////////////////////////////////////////////////////////////
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+});
 
-// Read filenames from commands folder and set them in client.commands
+// Startup
+client.once('ready', () => {
+	client.user.setPresence({ activities: [{ name: 'to your meme requests', type: "LISTENING" }], status: 'online' });
+	console.log(' <!> Bot is Ready <!> ');
+});
+
+// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
+client.config = config;
 client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
+console.log(`Attempting to load commands...`);
+const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 for (const file of commandFiles) {
+	const commandName = file.split(".")[0];
 	const command = require(`./commands/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
-	client.commands.set(command.data.name, command);
+	
+	client.commands.set(commandName, command);
+	console.log(`loaded > ${commandName}`);
 }
 
-// When the client is ready, run this code (only once)
-client.once('ready', () => {
-	client.user.setPresence({ activities: [{ name: 'to your meme requests' }], status: 'online' });
-	console.log('Ready!');
-});
-
-// On interaction
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
-
-	const command = client.commands.get(interaction.commandName);
-
-	if (!command) return;
-
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-	}
-});
-
-/*
-const connection = joinVoiceChannel({
-	channelId: voiceChannel.id,
-	guildId: guild.id,
-	adapterCreator: guild.voiceAdapterCreator,
-});
-
-const stream = ytdl('youtube link', { filter: 'audioonly' });
-const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-const player = createAudioPlayer();
-
-player.play(resource);
-connection.subscribe(player);
-
-player.on(AudioPlayerStatus.Idle, () => connection.destroy());
-*/
+const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
+for (const file of events) {
+  const eventName = file.split(".")[0];
+  const event = require(`./events/${file}`);
+  client.on(eventName, event.bind(null, client));
+}
 
 // Login to Discord with your client's token
-client.login(token);
+client.login(config.token);

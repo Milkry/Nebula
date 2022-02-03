@@ -7,7 +7,6 @@
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.6.0",
     "ffmpeg": "^0.0.4",
-    "ffmpeg-static": "^4.4.1",
     "install": "^0.13.0",
     "libsodium-wrappers": "^0.7.9",
     "npm": "^8.4.0",
@@ -15,7 +14,7 @@
   },
   "name": "discord-bot",
   "version": "1.0.0",
-  "description": "A memeing bot",
+  "description": "A memeing bot made by Milkry",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
