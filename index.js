@@ -6,12 +6,16 @@ const config = require("./config.json");
 
 // Create a new client instance
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+	intents: [
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.GUILD_VOICE_STATES
+	]
 });
 
 // Startup
 client.once('ready', () => {
-	client.user.setPresence({ activities: [{ name: 'to your meme requests', type: "LISTENING" }], status: 'online' });
+	client.user.setPresence({ activities: [{ name: 'monke noises', type: "LISTENING" }], status: 'online' });
 	console.log(' <!> Bot is Ready <!> ');
 });
 

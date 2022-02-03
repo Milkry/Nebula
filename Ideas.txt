@@ -1,0 +1,1 @@
+- Check if someone or something joined the penthouse channel, if so send a dm message to me or stamatis so we can know when to join
