@@ -13,6 +13,6 @@ module.exports = {
         message.delete();
         const victim = client.users.cache.get(target.id);
         victim.send('Sup my buddha. Someone decided to send you this :eyes:')
-        victim.send('https://tenor.com/view/rick-astly-rick-rolled-gif-22755440')
+        victim.send('https://tenor.com/view/challenge-find-out-when-this-gif-ends-rickroll-rickrolled-hidden-rickroll-gif-22493495')
     }
 }
