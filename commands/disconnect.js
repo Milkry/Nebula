@@ -6,12 +6,12 @@ module.exports = {
     run: async (client, message, args) => {
         if (message.author.id !== client.config.myId) return;
 
+        message.delete();
         const connection = getVoiceConnection(message.guildId);
         if (connection) {
             connection.destroy();
-            await message.reply('Bot disconnected.');
         } else {
-            await message.reply('Failed to disconnect bot.');
+            await message.author.send(":x: Failed to disconnect bot.");
         }
     }
 }
