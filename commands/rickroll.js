@@ -1,4 +1,4 @@
-const { joinVoiceChannel, createAudioPlayer, VoiceConnectionStatus, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 
 module.exports = {
     name: 'rickroll',
@@ -9,18 +9,22 @@ module.exports = {
         const channel = message.guild.channels.cache.get(args[0]); // change it to catch the error and exit if arg is not an id
 
         message.delete();
-        const audioPlayer = createAudioPlayer();
+        const player = createAudioPlayer();
         const resource = createAudioResource('sounds/NeverGonnaGiveYouUp.mp3');
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
             adapterCreator: channel.guild.voiceAdapterCreator,
         });
-        audioPlayer.play(resource);
-        connection.subscribe(audioPlayer);
+        player.play(resource);
+        connection.subscribe(player);
 
-        audioPlayer.on(AudioPlayerStatus.Playing, () => {
-            message.author.send(":white_check_mark: Successful rickroll!");
+        player.on(AudioPlayerStatus.Playing, async () => {
+            await message.author.send(":white_check_mark: Successful rickroll!");
         });
+        player.on(AudioPlayerStatus.Idle, async () => {
+            await message.author.send(":white_check_mark: Audio finished playing. Now leaving...");
+            connection.destroy();
+        })
     }
 }

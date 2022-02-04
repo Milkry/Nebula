@@ -9,9 +9,9 @@ module.exports = {
         const connection = getVoiceConnection(message.guildId);
         if (connection) {
             connection.destroy();
-            message.reply('Bot disconnected.');
+            await message.reply('Bot disconnected.');
         } else {
-            message.reply('Failed to disconnect bot.');
+            await message.reply('Failed to disconnect bot.');
         }
     }
 }
