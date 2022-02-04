@@ -19,9 +19,16 @@ client.once('ready', () => {
 	console.log(' <!> Bot is Ready <!> ');
 });
 
-// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
+// This makes the config file accessable from anywhere
 client.config = config;
 client.commands = new Collection();
+
+const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
+for (const file of events) {
+  const eventName = file.split(".")[0];
+  const event = require(`./events/${file}`);
+  client.on(eventName, (...args) => event.execute(...args, client));
+}
 
 console.log(`Attempting to load commands...`);
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
@@ -31,13 +38,6 @@ for (const file of commandFiles) {
 	
 	client.commands.set(commandName, command);
 	console.log(`loaded > ${commandName}`);
-}
-
-const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
-for (const file of events) {
-  const eventName = file.split(".")[0];
-  const event = require(`./events/${file}`);
-  client.on(eventName, event.bind(null, client));
 }
 
 // Login to Discord with your client's token
