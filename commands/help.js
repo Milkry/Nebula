@@ -4,6 +4,6 @@ module.exports = {
     run: async (client, message, args) => {
         if (message.author.id !== client.config.myId) return;
 
-        message.author.send('For now the menu is empty...');
+        message.author.send('For now the menu is empty...'); // make this in embedded
     }
 }

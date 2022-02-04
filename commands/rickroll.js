@@ -20,7 +20,7 @@ module.exports = {
         connection.subscribe(audioPlayer);
 
         audioPlayer.on(AudioPlayerStatus.Playing, () => {
-            message.author.send(":white_check_mark: Successfull rickroll!");
+            message.author.send(":white_check_mark: Successful rickroll!");
         });
     }
 }
