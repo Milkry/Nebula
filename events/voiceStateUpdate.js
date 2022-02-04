@@ -5,8 +5,10 @@ module.exports = {
         const guildId = "553181786117767169";
         // Penthouse Channel
         const channelId = "797450771628163103";
+        //const channelId = "936747738383679538"; // FOR TESTING PURPOSES
         // People to monitor for [Milkry, Zyjen]
         const memberIds = [client.config.myId, '190881082894188544'];
+        //const memberIds = [client.config.myId, '878207188672327690']; //FOR TESTING PURPOSES
 
         // If the channel the user left is the Penthouse AND is also empty AND the user that left is either me or zyjen, then do something
         if (oldState.channelId === channelId && oldState.channel.members.size === 0 && memberIds.includes(oldState.member.id)) { // LEAVE
@@ -22,13 +24,13 @@ module.exports = {
         if (memberIds[0] === newState.member.id) { // JOIN
             client.users.fetch(memberIds[1])
                 .then(user => {
-                    user.send(`${newState.member.displayName} joined the penthouse channel. Hop on BIG BOI.`);
+                    user.send(`${newState.member.displayName} joined the penthouse channel. Hop on BIG BOI.`).then(console.log('Successfully sent a notification!'));
                     global.penthouseBusy = true;
                 }).catch(error => console.error(error));
         } else if (memberIds[1] === newState.member.id) { // If Zyjen connected then notify Milkry
             client.users.fetch(memberIds[0])
                 .then(user => {
-                    user.send(`${newState.member.displayName} joined the penthouse channel. Hop on BIG BOI.`);
+                    user.send(`${newState.member.displayName} joined the penthouse channel. Hop on BIG BOI.`).then(console.log('Successfully sent a notification!'));
                     global.penthouseBusy = true;
                 }).catch(error => console.error(error));
         }
