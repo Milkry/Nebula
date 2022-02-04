@@ -6,7 +6,7 @@ module.exports = {
     run: async (client, message, args) => {
         if (message.author.id !== client.config.myId) return;
 
-        const connection = getVoiceConnection(client.config.guildId);
+        const connection = getVoiceConnection(message.guildId);
         if (connection) {
             connection.destroy();
             message.reply('Bot disconnected.');
