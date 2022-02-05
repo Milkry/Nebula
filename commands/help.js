@@ -1,10 +1,18 @@
+const { MessageEmbed } = require("discord.js");
+
 module.exports = {
     name: 'help',
     description: 'Displays a help menu',
     run: async (client, message, args) => {
-        if (message.author.id !== client.config.myId) return;
+        const access = [client.config.myId];
+        if (!access.includes(message.author.id)) return;
 
         message.delete();
-        message.author.send('For now the menu is empty...'); // make this in embedded
+        const helpMenu = new MessageEmbed()
+            .setColor('#4500d9')
+            .setTitle('Help Menu')
+            .setDescription("Prefix: [ **.** ]\n\n.rickroll {channelId}\n.dmrr {@user}\n.disconnect\n.reload {command name}")
+            .setTimestamp()
+        message.author.send({ embeds: [helpMenu] });
     }
 }

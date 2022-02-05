@@ -4,9 +4,10 @@ module.exports = {
     name: 'disconnect',
     description: 'Disconnects the bot from any connected voice channels',
     run: async (client, message, args) => {
-        if (message.author.id !== client.config.myId) return;
-
-        message.delete();
+        const access = [client.config.myId];
+        if (!access.includes(message.author.id)) return;
+        
+        await message.delete().catch(e => console.error(e));
         const connection = getVoiceConnection(message.guildId);
         if (connection) {
             connection.destroy();
