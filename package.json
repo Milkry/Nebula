@@ -9,6 +9,7 @@
     "ffmpeg": "^0.0.4",
     "install": "^0.13.0",
     "libsodium-wrappers": "^0.7.9",
+    "nhentai-js": "^4.0.0",
     "npm": "^8.4.0",
     "ytdl-core": "^4.10.0"
   },
