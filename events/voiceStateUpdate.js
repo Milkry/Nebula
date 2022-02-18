@@ -1,38 +1,73 @@
+const { MessageEmbed } = require('discord.js');
+
 module.exports = {
     name: 'voiceStateUpdate',
     execute(oldState, newState, client) {
-        // Medusa Server
-        const guildId = "553181786117767169";
-        // Penthouse Channel
-        const channelId = "797450771628163103";
-        //const channelId = "936747738383679538"; // FOR TESTING PURPOSES
-        // People to monitor for [Milkry, Zyjen]
-        const memberIds = [client.config.myId, '190881082894188544'];
-        //const memberIds = [client.config.myId, '878207188672327690']; //FOR TESTING PURPOSES
+        // People to monitor for
+        const monitorList = [
+            {
+                channelName: 'Penthouse',
+                channelId: '797450771628163103',
+                access: [client.config.myId, '190881082894188544'],
+            },
+            {
+                channelName: 'Boardroom',
+                channelId: '553253000987279360',
+                access: ['307947376725721089', '544194307414949898'],
+            }
+        ];
 
-        // If the channel the user left is the Penthouse AND is also empty AND the user that left is either me or zyjen, then do something
-        if (oldState.channelId === channelId && oldState.channel.members.size === 0 && memberIds.includes(oldState.member.id)) { // LEAVE
-            global.penthouseBusy = false;
-            return;
+        /*for (let i = 0; i < monitorList.length; i++) {
+            if (oldState.channelId === monitorList[i].channelId && monitorList[i].access.includes(newState.member.id)
+                && newState.channelId === monitorList[i].channelId && monitorList[i].access.includes(newState.member.id)) {
+                
+            }
+        }*/
+
+        // Update busy state when disconnecting from a monitored channel
+        for (let i = 0; i < monitorList.length; i++) {
+            if (oldState.channelId === monitorList[i].channelId && oldState.channel.members.size === 0 && monitorList[i].access.includes(oldState.member.id)) {
+                global.channelBusyState[i] = false;
+                return;
+            }
         }
-        // If the event is NOT from the Penthouse, then exit
-        if (newState.channelId !== channelId) return;
-        // If the Penthouse has someone in it, then exit
-        if (global.penthouseBusy) return;
 
-        // If Milkry connected then notify Zyjen
-        if (memberIds[0] === newState.member.id) { // JOIN
-            client.users.fetch(memberIds[1])
-                .then(user => {
-                    user.send(`${newState.member.displayName} joined the penthouse channel. Hop on BIG BOI.`).then(console.log('Successfully sent a notification!'));
-                    global.penthouseBusy = true;
-                }).catch(error => console.error(error));
-        } else if (memberIds[1] === newState.member.id) { // If Zyjen connected then notify Milkry
-            client.users.fetch(memberIds[0])
-                .then(user => {
-                    user.send(`${newState.member.displayName} joined the penthouse channel. Hop on BIG BOI.`).then(console.log('Successfully sent a notification!'));
-                    global.penthouseBusy = true;
-                }).catch(error => console.error(error));
+        // If the channel is not in the monitor list, then exit
+        let index = -1;
+        for (let i = 0; i < monitorList.length; i++) {
+            if (newState.channelId === monitorList[i].channelId) {
+                index = i; // save the channel the event was triggered from
+                break;
+            }
+        } if (index === -1) return;
+
+        // If the channel has someone in it with access, then exit
+        if (global.channelBusyState[index]) return;
+
+        // If the member is not in the access list, then exit
+        if (!monitorList[index].access.includes(newState.member.id)) return;
+
+        // Inform the rest of the members in the access list to join
+        global.channelBusyState[index] = true;
+        for (let id of monitorList[index].access) {
+            if (newState.member.id !== id) {
+                client.users.fetch(id)
+                    .then(user => {
+                        user.send({ embeds: [this.createEmbedMessage(`**<@${newState.member.id}>** joined **(<#${newState.channel.id}>)**. Hop on.`, newState.member, newState.guild)] })
+                            .then(console.log('Successfully sent a notification!'));
+                    }).catch(error => console.error(error));
+            }
         }
     },
+    createEmbedMessage(message, user, guild) {
+        const notification = new MessageEmbed()
+            .setColor('#fcba03')
+            .setTitle('Someone is waiting for you!')
+            .setAuthor({ name: `From ${guild.name}`, iconURL: guild.iconURL({ dynamic: true })})
+            .setDescription(message)
+            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+            .setTimestamp()
+
+        return notification;
+    }
 };

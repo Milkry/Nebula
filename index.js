@@ -16,6 +16,7 @@ const client = new Client({
 // Startup
 client.once('ready', () => {
 	client.user.setPresence({ activities: [{ name: 'monke noises', type: "LISTENING" }], status: 'online' });
+	global.channelBusyState = [false, false]; // we could change this to get the people who are already on the channels
 	console.log(' <!> Bot is Ready <!> ');
 });
 
