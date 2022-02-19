@@ -53,7 +53,7 @@ module.exports = {
             if (newState.member.id !== id) {
                 client.users.fetch(id)
                     .then(user => {
-                        user.send({ embeds: [this.createEmbedMessage(`**<@${newState.member.id}>** joined **(<#${newState.channel.id}>)**. Hop on.`, newState.member, newState.guild)] })
+                        user.send({ embeds: [this.createEmbedMessage(`**<@${newState.member.id}>** joined **(<#${newState.channel.id}>)**`, newState.member, newState.guild)] })
                             .then(console.log('Successfully sent a notification!'));
                     }).catch(error => console.error(error));
             }
@@ -62,7 +62,7 @@ module.exports = {
     createEmbedMessage(message, user, guild) {
         const notification = new MessageEmbed()
             .setColor('#fcba03')
-            .setTitle('Someone is waiting for you!')
+            .setTitle('[<a:joinvc:852902342415482968>] Someone is waiting for you! [<a:joinvc:852902342415482968>]')
             .setAuthor({ name: `From ${guild.name}`, iconURL: guild.iconURL({ dynamic: true })})
             .setDescription(message)
             .setThumbnail(user.displayAvatarURL({ dynamic: true }))
