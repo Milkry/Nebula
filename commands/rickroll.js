@@ -3,13 +3,24 @@ const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerSta
 module.exports = {
     name: 'rickroll',
     description: 'Joins a channel and plays the rick roll song',
+    aliases: ['rr'],
     run: async (client, message, args) => {
         const access = [client.config.myId];
         if (!access.includes(message.author.id)) return;
-        // Get the channel object using the id given
-        const channel = message.guild.channels.cache.get(args[0]); // change it to catch the error and exit if arg is not an id
 
         message.delete();
+        // Validate
+        if (!args[0]) {
+            message.author.send("Please provide a channel ID...");
+            return;
+        }
+        if (!isNan(args[0])) {
+            message.author.send("This is not a channel ID. Please provide a valid one.");
+            return;
+        }
+
+        // Get the channel object using the id given
+        const channel = message.guild.channels.cache.get(args[0]); // change it to catch the error and exit if arg is not an id
         const player = createAudioPlayer();
         const resource = createAudioResource('sounds/NeverGonnaGiveYouUp.mp3');
         const connection = joinVoiceChannel({
@@ -24,7 +35,7 @@ module.exports = {
             await message.author.send(":white_check_mark: Successful rickroll!");
         });
         player.on(AudioPlayerStatus.Idle, async () => {
-            await message.author.send(":white_check_mark: Audio finished playing. Now leaving...");
+            await message.author.send(":white_check_mark: Audio finished playing. Now leaving to find bananas...");
             connection.destroy();
         })
     }

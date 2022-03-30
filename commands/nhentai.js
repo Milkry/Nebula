@@ -2,8 +2,9 @@ const { MessageEmbed } = require("discord.js");
 const nhentai = require('nhentai-js')
 
 module.exports = {
-    name: 'nh',
+    name: 'nhentai',
     description: 'Resolves nhentai codes to doujins',
+    aliases: ['nh'],
     run: async (client, message, args) => {
         //const access = [client.config.myId];
         //if (!access.includes(message.author.id)) return;
