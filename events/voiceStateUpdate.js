@@ -49,7 +49,7 @@ module.exports = {
                 client.users.fetch(id)
                     .then(user => {
                         user.send({ embeds: [this.createEmbedMessage(`**<@${newState.member.id}>** joined **(<#${newState.channel.id}>)**`, newState.member, newState.guild)] })
-                            .then(console.log(`Successfully notifed users for channel: ${activeMonitorList[index].channelName}`));
+                            .then(console.log(`Activity detected on [${activeMonitorList[index].channelName}]. Notifying [${user.username}].`));
                     }).catch(error => console.error(error));
             }
         }

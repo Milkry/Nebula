@@ -1,26 +1,29 @@
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
+const helper = require('../helper_functions.js')
 
 module.exports = {
     name: 'rickroll',
     description: 'Joins a channel and plays the rick roll song',
     aliases: ['rr'],
     run: async (client, message, args) => {
+        // Access
         const access = [client.config.myId];
         if (!access.includes(message.author.id)) return;
 
-        message.delete();
+        // Command Parameters
+        const channelID = args[0];
+
         // Validate
-        if (!args[0]) {
-            message.author.send("Please provide a channel ID...");
-            return;
+        message.delete();
+        if (!channelID) {
+            return message.author.send({ embeds: [await helper.createEmbedResponse(':x: Please provide a channel ID.')] });
         }
-        if (!isNan(args[0])) {
-            message.author.send("This is not a channel ID. Please provide a valid one.");
-            return;
+        if (isNaN(channelID)) {
+            return message.author.send({ embeds: [await helper.createEmbedResponse(':x: This is not a valid channel ID.')] });
         }
 
-        // Get the channel object using the id given
-        const channel = message.guild.channels.cache.get(args[0]); // change it to catch the error and exit if arg is not an id
+        // Process
+        const channel = message.guild.channels.cache.get(channelID);
         const player = createAudioPlayer();
         const resource = createAudioResource('sounds/NeverGonnaGiveYouUp.mp3');
         const connection = joinVoiceChannel({
@@ -32,11 +35,11 @@ module.exports = {
         connection.subscribe(player);
 
         player.on(AudioPlayerStatus.Playing, async () => {
-            await message.author.send(":white_check_mark: Successful rickroll!");
+            return message.author.send({ embeds: [await helper.createEmbedResponse(':white_check_mark: Successfully rickrolled the entire voice channel.')] });
         });
         player.on(AudioPlayerStatus.Idle, async () => {
-            await message.author.send(":white_check_mark: Audio finished playing. Now leaving to find bananas...");
-            connection.destroy();
+            message.author.send({ embeds: [await helper.createEmbedResponse(':white_check_mark: Audio finished playing. Now leaving to find bananas...')] });
+            return connection.destroy();
         })
     }
 }

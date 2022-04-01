@@ -1,15 +1,21 @@
 const { MessageEmbed } = require('discord.js');
+const helper = require('../helper_functions.js');
 
 module.exports = {
     name: 'monitor',
     description: 'Disables notifications for a specific voice channel or for all voice channels.',
     aliases: ['mon'],
     run: async (client, message, args) => {
+        // Access
         const access = [client.config.myId];
         if (!access.includes(message.author.id)) return;
 
-        switch (args[0]) {
+        // Command Parameters
+        const channel = args[0];
+        const status = args[1];
 
+        // Process
+        switch (channel) {
             case "status":
             case "s":
                 let mlist = "";
@@ -30,56 +36,38 @@ module.exports = {
                 const msg = new MessageEmbed()
                     .setTitle('Monitor Status')
                     .setDescription(mlist)
-                    .setTimestamp()
                 message.channel.send({ embeds: [msg] });
                 break;
 
             case "global":
             case "g":
-                // Validate
-                if (!args[1]) {
-                    const msg = new MessageEmbed()
-                        .setDescription(`A second parameter was not given. It must be either **On** or **Off**.`);
-                    message.channel.send({ embeds: [msg] });
-                    return;
+                // Validate & Process
+                if (!status) {
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: A second parameter was not given. It must be either **On** or **Off**.`)] });
                 }
-
-                // Process the command
-                if (args[1].toLowerCase() === "on") {
+                if (status.toLowerCase() === "on") {
                     client.monitor = true;
-                    const msg = new MessageEmbed()
-                        .setDescription(`Global channel monitoring is now **ENABLED**.`);
-                    message.channel.send({ embeds: [msg] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`Global channel monitoring is now **ENABLED**.`)] });
                 }
-                else if (args[1].toLowerCase() === "off") {
+                else if (status.toLowerCase() === "off") {
                     client.monitor = false;
-                    const msg = new MessageEmbed()
-                        .setDescription(`Global channel monitoring is now **DISABLED**.`);
-                    message.channel.send({ embeds: [msg] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`Global channel monitoring is now **DISABLED**.`)] });
                 }
                 else {
-                    const msg = new MessageEmbed()
-                        .setDescription(`Invalid second argument...`);
-                    message.channel.send({ embeds: [msg] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Invalid second argument...`)] });
                 }
                 break;
 
             default:
-                const channel = args[0];
-                const status = args[1];
-
                 // Validate
+                if (!channel) {
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Missing command arguments.`)] });
+                }
                 if (!status) {
-                    const msg = new MessageEmbed()
-                        .setDescription(`A second parameter must be given.`);
-                    message.channel.send({ embeds: [msg] });
-                    return;
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Not enough command arguments. A second parameter must be given.`)] });
                 }
                 if (status.toLowerCase() !== "on" && status.toLowerCase() !== "off") {
-                    const msg = new MessageEmbed()
-                        .setDescription(`Second parameter must be either **On** or **Off**.`);
-                    message.channel.send({ embeds: [msg] });
-                    return;
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Second parameter must be either **On** or **Off**.`)] });
                 }
 
                 // Process the command
@@ -102,9 +90,7 @@ module.exports = {
                     }
                 })
                 if (!found) {
-                    const msg = new MessageEmbed()
-                        .setDescription(`The channel requested was not found.`);
-                    message.channel.send({ embeds: [msg] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: The channel requested was not found.`)] });
                 }
                 break;
         }

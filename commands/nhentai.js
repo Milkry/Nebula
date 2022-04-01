@@ -1,29 +1,39 @@
 const { MessageEmbed } = require("discord.js");
 const nhentai = require('nhentai-js')
+const helper = require('../helper_functions.js')
 
 module.exports = {
     name: 'nhentai',
     description: 'Resolves nhentai codes to doujins',
     aliases: ['nh'],
     run: async (client, message, args) => {
+        // Access
         //const access = [client.config.myId];
         //if (!access.includes(message.author.id)) return;
-        if (isNaN(args[0]) || !args[0]) {
-            message.channel.send(':x: nHentai code not provided. Please include one.');
-            return;
+
+        // Command Parameters
+        const nhentaiCode = args[0];
+        const silentMode = args[1];
+
+        // Validate
+        if (!nhentaiCode) {
+            return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: Code not provided. Please include one.')] });
+        }
+        if (isNaN(nhentaiCode)) {
+            return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: This is not a valid nHentai code. Please use a new one.')] });
         }
 
-        const code = args[0];
-        if (nhentai.exists(code)) {
+        // Process
+        if (nhentai.exists(nhentaiCode)) {
             try {
-                const dojin = await nhentai.getDoujin(code);
+                const dojin = await nhentai.getDoujin(nhentaiCode);
                 const response = new MessageEmbed()
                     .setColor('#ff7369')
                     .setTitle(`**${dojin.title}**`)
                     .setDescription(`**Link:** ${dojin.link}\n**Languages:** ${dojin.details.languages}\n**Tags:** ${dojin.details.tags}\n**Length:** ${dojin.details.pages}\n**Uploaded:** ${dojin.details.uploaded}`)
                     .setImage(dojin.thumbnails[0])
                     .setTimestamp()
-                if (args[1] === '-s') {
+                if (silentMode === '-s') {
                     message.delete();
                     message.author.send({ embeds: [response] });
                 } else {
@@ -31,7 +41,13 @@ module.exports = {
                 }
             } catch (e) {
                 console.error(e);
-                message.author.send('nHentai servers seem to be busy. Please try again in a few minutes.');
+                if (silentMode === '-s') {
+                    message.delete();
+                    message.author.send(`This is either not a valid doujin number or the servers are busy. Please try again.`);
+                }
+                else {
+                    message.channel.send(`This is either not a valid doujin number or the servers are busy. Please try again.`);
+                }
             }
         }
     }

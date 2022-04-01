@@ -1,21 +1,31 @@
+const helper = require('../helper_functions.js')
+
 module.exports = {
-    name: 'reload',
-    description: 'Reloads a chosen command without needing to restart the bot',
-    run: async (client, message, args) => {
-      if (message.author.id !== client.config.myId) return;
-  
-      if (!args || args.length < 1) return message.reply(":x: Must provide a command name to reload.");
-      const commandName = args[0];
-      // Check if the command exists and is valid
-      if (!client.commands.has(commandName)) {
-        return message.reply(":x: This command does not exist");
-      }
-      // the path is relative to the *current folder*, so just ./filename.js
-      delete require.cache[require.resolve(`./${commandName}.js`)];
-      // We also need to delete and reload the command from the client.commands Enmap
-      client.commands.delete(commandName);
-      const props = require(`./${commandName}.js`);
-      client.commands.set(commandName, props);
-      message.reply(`:white_check_mark: The command ${commandName} has been reloaded`);
+  name: 'reload',
+  description: 'Reloads a command without needing to restart the bot',
+  aliases: ['rel'],
+  run: async (client, message, args) => {
+    // Access
+    const access = [client.config.myId];
+    if (!access.includes(message.author.id)) return;
+
+    // Command Parameters
+    const commandName = args[0];
+
+    // Validate
+    if (!commandName) {
+      return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Must provide a command to reload.`)] });
     }
+    if (!client.commands.has(commandName)) { // Check if the command exists and is valid
+      return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: This command does not exist.`)] });
+    }
+
+    // Process
+    delete require.cache[require.resolve(`./${commandName}.js`)];
+    // We also need to delete and reload the command from the client.commands Enmap
+    client.commands.delete(commandName);
+    const props = require(`./${commandName}.js`);
+    client.commands.set(commandName, props);
+    message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: **${commandName}** has been reloaded.`)] });
+  }
 }

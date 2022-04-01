@@ -17,6 +17,12 @@ let monitorList = [
 		channelId: '553253000987279360',
 		access: ['307947376725721089', '544194307414949898'],
 		active: true,
+	},
+	{
+		channelName: 'General',
+		channelId: '920652294322806788',
+		access: [config.myId, '878207188672327690'],
+		active: true,
 	}
 ];
 let monitorVoiceChannelsGlobal = true;
@@ -31,14 +37,14 @@ const client = new Client({
 	]
 });
 
-// Startup
+// Start
 client.once('ready', () => {
 	client.user.setPresence({ activities: [{ name: 'monke noises', type: "LISTENING" }], status: 'online' });
 	global.channelBusyState = [false, false]; // we could change this to get the people who are already on the channels
 	console.log(' <!> Bot is Ready <!> ');
 });
 
-// This makes the config file accessable from anywhere
+// This makes variables accessible from anywhere
 client.config = config;
 client.monitor = monitorVoiceChannelsGlobal;
 client.monitorList = monitorList;
