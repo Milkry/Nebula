@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const helper = require("../helper_functions.js");
 
 module.exports = {
     name: 'voiceStateUpdate',
@@ -48,8 +49,14 @@ module.exports = {
             if (newState.member.id !== id) {
                 client.users.fetch(id)
                     .then(user => {
+                        user.send(":arrow_down:");
+                        user.send(":arrow_down:");
+                        user.send(":arrow_down:");
                         user.send({ embeds: [this.createEmbedMessage(`**<@${newState.member.id}>** joined **(<#${newState.channel.id}>)**`, newState.member, newState.guild)] })
                             .then(console.log(`Activity detected on [${activeMonitorList[index].channelName}]. Notifying [${user.username}].`));
+                        user.send(":arrow_up:");
+                        user.send(":arrow_up:");
+                        user.send(":arrow_up:");
                     }).catch(error => console.error(error));
             }
         }

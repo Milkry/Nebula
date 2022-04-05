@@ -5,7 +5,13 @@ module.exports = {
         const embedMsg = new MessageEmbed()
             .setDescription(message)
         return embedMsg;
+    },
+    sleep: async (ms) => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
     }
 }
 
 //message.channel.send({ embeds: [await helper.createEmbedResponse(``)] });
+//await sleep(ms);
