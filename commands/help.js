@@ -23,7 +23,7 @@ module.exports = {
 
         message.delete();
         const helpMenu = new MessageEmbed()
-            .setColor('#4500d9')
+            .setColor(client.theme.Notification)
             .setTitle('Help Menu')
             .setDescription(helpDescription)
         message.author.send({ embeds: [helpMenu] });

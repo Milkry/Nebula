@@ -36,6 +36,7 @@ module.exports = {
                 const msg = new MessageEmbed()
                     .setTitle('Monitor Status')
                     .setDescription(mlist)
+                    .setColor(client.theme.Neutral)
                 message.channel.send({ embeds: [msg] });
                 break;
 
@@ -43,31 +44,31 @@ module.exports = {
             case "g":
                 // Validate & Process
                 if (!status) {
-                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: A second parameter was not given. It must be either **On** or **Off**.`)] });
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: A second parameter was not given. It must be either **On** or **Off**.`, client.theme.Fail)] });
                 }
                 if (status.toLowerCase() === "on") {
                     client.monitor = true;
-                    message.channel.send({ embeds: [await helper.createEmbedResponse(`Global channel monitoring is now **ENABLED**.`)] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: Global channel monitoring is now **ENABLED**.`, client.theme.Success)] });
                 }
                 else if (status.toLowerCase() === "off") {
                     client.monitor = false;
-                    message.channel.send({ embeds: [await helper.createEmbedResponse(`Global channel monitoring is now **DISABLED**.`)] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: Global channel monitoring is now **DISABLED**.`, client.theme.Success)] });
                 }
                 else {
-                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Invalid second argument...`)] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Invalid second argument...`, client.theme.Fail)] });
                 }
                 break;
 
             default:
                 // Validate
                 if (!channel) {
-                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Missing command arguments.`)] });
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Missing command arguments.`, client.theme.Fail)] });
                 }
                 if (!status) {
-                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Not enough command arguments. A second parameter must be given.`)] });
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Not enough command arguments. A second parameter must be given.`, client.theme.Fail)] });
                 }
                 if (status.toLowerCase() !== "on" && status.toLowerCase() !== "off") {
-                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Second parameter must be either **On** or **Off**.`)] });
+                    return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Second parameter must be either **On** or **Off**.`, client.theme.Fail)] });
                 }
 
                 // Process the command
@@ -90,7 +91,7 @@ module.exports = {
                     }
                 })
                 if (!found) {
-                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: The channel requested was not found.`)] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: The channel requested was not found.`, client.theme.Fail)] });
                 }
                 break;
         }

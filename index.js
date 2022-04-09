@@ -5,6 +5,7 @@ const config = require("./config.json");
 //////////////////////////////////////////////////////////////
 
 ///////////////////////// Variables ///////////////////////////
+let monitorVoiceChannelsGlobal = true;
 let monitorList = [
 	{
 		channelName: 'Penthouse',
@@ -17,15 +18,20 @@ let monitorList = [
 		channelId: '553253000987279360',
 		access: ['307947376725721089', '544194307414949898'],
 		active: true,
-	},
+	}/*,
 	{
 		channelName: 'General',
 		channelId: '920652294322806788',
 		access: [config.myId, '878207188672327690'],
 		active: true,
-	}
+	}*/
 ];
-let monitorVoiceChannelsGlobal = true;
+let theme = {
+	Neutral: "#bf52ff",
+	Success: "#7aff14",
+	Fail: "#ff1428",
+	Notification: "#fcba03"
+}
 //////////////////////////////////////////////////////////////
 
 // Create a new client instance
@@ -48,6 +54,7 @@ client.once('ready', () => {
 client.config = config;
 client.monitor = monitorVoiceChannelsGlobal;
 client.monitorList = monitorList;
+client.theme = theme;
 client.commands = new Collection();
 
 // Event Handler

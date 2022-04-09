@@ -14,10 +14,10 @@ module.exports = {
 
     // Validate
     if (!commandName) {
-      return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Must provide a command to reload.`)] });
+      return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Must provide a command to reload.`, client.theme.Fail)] });
     }
     if (!client.commands.has(commandName)) { // Check if the command exists and is valid
-      return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: This command does not exist.`)] });
+      return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: This command does not exist.`, client.theme.Fail)] });
     }
 
     // Process
@@ -26,6 +26,6 @@ module.exports = {
     client.commands.delete(commandName);
     const props = require(`./${commandName}.js`);
     client.commands.set(commandName, props);
-    message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: **${commandName}** has been reloaded.`)] });
+    message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: **${commandName}** has been reloaded.`, client.theme.Success)] });
   }
 }

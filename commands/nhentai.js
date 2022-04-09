@@ -17,10 +17,10 @@ module.exports = {
 
         // Validate
         if (!nhentaiCode) {
-            return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: Code not provided. Please include one.')] });
+            return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: Code not provided. Please include one.', client.theme.Fail)] });
         }
         if (isNaN(nhentaiCode)) {
-            return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: This is not a valid nHentai code. Please use a new one.')] });
+            return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: This is not a valid nHentai code. Please use a new one.', client.theme.Fail)] });
         }
 
         // Process
@@ -28,7 +28,7 @@ module.exports = {
             try {
                 const dojin = await nhentai.getDoujin(nhentaiCode);
                 const response = new MessageEmbed()
-                    .setColor('#ff7369')
+                    .setColor(client.theme.Neutral)
                     .setTitle(`**${dojin.title}**`)
                     .setDescription(`**Link:** ${dojin.link}\n**Languages:** ${dojin.details.languages}\n**Tags:** ${dojin.details.tags}\n**Length:** ${dojin.details.pages}\n**Uploaded:** ${dojin.details.uploaded}`)
                     .setImage(dojin.thumbnails[0])

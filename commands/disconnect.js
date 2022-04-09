@@ -16,7 +16,7 @@ module.exports = {
         if (connection) {
             connection.destroy();
         } else {
-            message.author.send({ embeds: [await helper.createEmbedResponse(`:x: Bot is not connected anywhere.`)] });
+            message.author.send({ embeds: [await helper.createEmbedResponse(`:x: Bot is not connected anywhere.`, client.theme.Fail)] });
         }
     }
 }

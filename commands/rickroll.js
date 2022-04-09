@@ -16,10 +16,10 @@ module.exports = {
         // Validate
         message.delete();
         if (!channelID) {
-            return message.author.send({ embeds: [await helper.createEmbedResponse(':x: Please provide a channel ID.')] });
+            return message.author.send({ embeds: [await helper.createEmbedResponse(':x: Please provide a channel ID.', client.theme.Fail)] });
         }
         if (isNaN(channelID)) {
-            return message.author.send({ embeds: [await helper.createEmbedResponse(':x: This is not a valid channel ID.')] });
+            return message.author.send({ embeds: [await helper.createEmbedResponse(':x: This is not a valid channel ID.', client.theme.Fail)] });
         }
 
         // Process
@@ -35,10 +35,10 @@ module.exports = {
         connection.subscribe(player);
 
         player.on(AudioPlayerStatus.Playing, async () => {
-            return message.author.send({ embeds: [await helper.createEmbedResponse(':white_check_mark: Successfully rickrolled the entire voice channel.')] });
+            return message.author.send({ embeds: [await helper.createEmbedResponse(':white_check_mark: Successfully rickrolled the entire voice channel.', client.theme.Success)] });
         });
         player.on(AudioPlayerStatus.Idle, async () => {
-            message.author.send({ embeds: [await helper.createEmbedResponse(':white_check_mark: Audio finished playing. Now leaving to find bananas...')] });
+            message.author.send({ embeds: [await helper.createEmbedResponse(':white_check_mark: Audio finished playing. Now leaving to find bananas...', client.theme.Success)] });
             return connection.destroy();
         })
     }

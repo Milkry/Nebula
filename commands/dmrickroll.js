@@ -15,13 +15,13 @@ module.exports = {
         // Validate
         message.delete();
         if (!targetUser) {
-            return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: You did not mention a user.`)] });
+            return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: You did not mention a user.`, client.theme.Fail)] });
         }
         if (targetUser.id === client.config.myId) {
-            return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: Nice try. You sussy baka!`)] });
+            return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: Nice try. You sussy baka!`, client.theme.Fail)] });
         }
         if (targetUser.id === client.config.clientId) {
-            return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: I can't rickroll my self...you goof ball.`)] });
+            return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: I can't rickroll my self...you goof ball.`, client.theme.Fail)] });
         }
 
         // Process
