@@ -6,17 +6,26 @@ const config = require("./config.json");
 
 ///////////////////////// Variables ///////////////////////////
 let monitorVoiceChannelsGlobal = true;
+let Zyjen = '190881082894188544';
+let Backy = '307947376725721089';
+let Nana = '544194307414949898';
 let monitorList = [
 	{
 		channelName: 'Penthouse',
 		channelId: '797450771628163103',
-		access: [config.myId, '190881082894188544'],
+		access: [config.myId, Zyjen, Backy],
 		active: true,
 	},
 	{
 		channelName: 'Boardroom',
 		channelId: '553253000987279360',
-		access: ['307947376725721089', '544194307414949898'],
+		access: [config.myId, Backy, Nana],
+		active: true,
+	},
+	{
+		channelName: 'Study Lounge',
+		channelId: '952180093550202890',
+		access: [config.myId, Backy, Nana],
 		active: true,
 	}/*,
 	{

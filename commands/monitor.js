@@ -27,10 +27,10 @@ module.exports = {
                 }
                 client.monitorList.forEach(voiceChannel => {
                     if (voiceChannel.active) {
-                        mlist += "[:white_check_mark:] " + voiceChannel.channelName + "\n";
+                        mlist += "[:white_check_mark:] " + voiceChannel.channelName + " (" + voiceChannel.access.length + " members)\n";
                     }
                     else {
-                        mlist += "[:x:] " + voiceChannel.channelName + "\n";
+                        mlist += "[:x:] " + voiceChannel.channelName + " (" + voiceChannel.access.length + " members)\n";
                     }
                 });
                 const msg = new MessageEmbed()

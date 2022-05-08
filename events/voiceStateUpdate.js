@@ -51,10 +51,8 @@ module.exports = {
                     .then(user => {
                         user.send(":arrow_down:");
                         user.send(":arrow_down:");
-                        user.send(":arrow_down:");
-                        user.send({ embeds: [this.createEmbedMessage(`**<@${newState.member.id}>** joined **(<#${newState.channel.id}>)**`, newState.member, newState.guild, client)] })
+                        user.send({ embeds: [this.createEmbedMessage(`<@${newState.member.id}> joined <#${newState.channel.id}>`, newState.member, newState.guild, client)] })
                             .then(console.log(`Activity detected on [${activeMonitorList[index].channelName}]. Notifying [${user.username}].`));
-                        user.send(":arrow_up:");
                         user.send(":arrow_up:");
                         user.send(":arrow_up:");
                     }).catch(error => console.error(error));
@@ -65,10 +63,9 @@ module.exports = {
         const notification = new MessageEmbed()
             .setColor(client.theme.Notification)
             .setTitle('[<a:joinvc:852902342415482968>] Someone is waiting for you! [<a:joinvc:852902342415482968>]')
-            .setAuthor({ name: `From ${guild.name}`, iconURL: guild.iconURL({ dynamic: true }) })
+            .setAuthor({ name: `${guild.name}`, iconURL: guild.iconURL({ dynamic: true }) })
             .setDescription(message)
             .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-            .setTimestamp()
 
         return notification;
     }
