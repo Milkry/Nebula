@@ -6,36 +6,37 @@ const config = require("./config.json");
 
 ///////////////////////// Variables ///////////////////////////
 let monitorVoiceChannelsGlobal = true;
-let Zyjen = '190881082894188544';
-let Backy = '307947376725721089';
-let Nana = '544194307414949898';
+const Milkry = { 'id': config.myId, 'multiple': true };
+const Zyjen = { 'id': '190881082894188544', 'multiple': true };
+const Backy = { 'id': '307947376725721089', 'multiple': false };
+const Nana = { 'id': '544194307414949898', 'multiple': false };
 let monitorList = [
 	{
 		channelName: 'Penthouse',
 		channelId: '797450771628163103',
-		access: [config.myId, Zyjen, Backy],
+		access: [Milkry, Backy, Zyjen],
 		active: true,
 	},
 	{
 		channelName: 'Boardroom',
 		channelId: '553253000987279360',
-		access: [config.myId, Backy, Nana],
+		access: [Milkry, Backy, Nana],
 		active: true,
 	},
 	{
 		channelName: 'Study Lounge',
 		channelId: '952180093550202890',
-		access: [config.myId, Backy, Nana],
+		access: [Milkry, Backy, Nana],
 		active: true,
 	}/*,
 	{
 		channelName: 'General',
 		channelId: '920652294322806788',
-		access: [config.myId, '878207188672327690'],
+		access: [Milkry, { 'id': '878207188672327690', 'multiple': false }],
 		active: true,
 	}*/
 ];
-let theme = {
+const theme = {
 	Neutral: "#bf52ff",
 	Success: "#7aff14",
 	Fail: "#ff1428",

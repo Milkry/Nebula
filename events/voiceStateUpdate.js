@@ -14,15 +14,10 @@ module.exports = {
                 activeMonitorList.push(voiceChannel);
         }
 
-        /*for (let i = 0; i < activeMonitorList.length; i++) {
-            if (oldState.channelId === activeMonitorList[i].channelId && activeMonitorList[i].access.includes(newState.member.id)
-                && newState.channelId === activeMonitorList[i].channelId && activeMonitorList[i].access.includes(newState.member.id)) {
-            }
-        }*/
-
-        // Update busy state when disconnecting from a monitored channel
+        // WHEN THE LAST MEMBER LEAVES A MONITORED CHANNEL
         for (let i = 0; i < activeMonitorList.length; i++) {
-            if (oldState.channelId === activeMonitorList[i].channelId && oldState.channel.members.size === 0 && activeMonitorList[i].access.includes(oldState.member.id)) {
+            if (oldState.channelId === activeMonitorList[i].channelId && oldState.channel.members.size === 0 && activeMonitorList[i].access.find(x => x.id === oldState.member.id) !== undefined) {
+                // Update busy state when disconnecting from a monitored channel
                 global.channelBusyState[i] = false;
                 return;
             }
@@ -40,21 +35,27 @@ module.exports = {
         // If the channel has someone in it with access, then exit
         if (global.channelBusyState[index]) return;
 
+        // Might be able to connect the previous if statement with the next [CHANGE_NEEDED]
+
         // If the member is not in the access list, then exit
-        if (!activeMonitorList[index].access.includes(newState.member.id)) return;
+        if (activeMonitorList[index].access.find(x => x.id === newState.member.id) === undefined) return;
 
         // Inform the rest of the members in the access list to join
         global.channelBusyState[index] = true;
-        for (let id of activeMonitorList[index].access) {
-            if (newState.member.id !== id) {
-                client.users.fetch(id)
+        for (let member of activeMonitorList[index].access) {
+            if (newState.member.id !== member.id) {
+                client.users.fetch(member.id)
                     .then(user => {
-                        user.send(":arrow_down:");
-                        user.send(":arrow_down:");
+                        if (member.multiple) {
+                            user.send(":arrow_down:");
+                            user.send(":arrow_down:");
+                        }
                         user.send({ embeds: [this.createEmbedMessage(`<@${newState.member.id}> joined <#${newState.channel.id}>`, newState.member, newState.guild, client)] })
-                            .then(console.log(`Activity detected on [${activeMonitorList[index].channelName}]. Notifying [${user.username}].`));
-                        user.send(":arrow_up:");
-                        user.send(":arrow_up:");
+                            .then(console.log(`Activity detected on [${activeMonitorList[index].channelName}]. Notifying [${user.username}]...`));
+                        if (member.multiple) {
+                            user.send(":arrow_up:");
+                            user.send(":arrow_up:");
+                        }
                     }).catch(error => console.error(error));
             }
         }
