@@ -1,4 +1,5 @@
 ////////////////////////// Imports ///////////////////////////
+require('dotenv').config();
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const config = require("./config.json");
@@ -6,7 +7,7 @@ const config = require("./config.json");
 
 ///////////////////////// Variables ///////////////////////////
 let monitorVoiceChannelsGlobal = true;
-const Milkry = { 'id': config.myId, 'multiple': true };
+const Milkry = { 'id': process.env.OWNER_ID, 'multiple': true };
 const Zyjen = { 'id': '190881082894188544', 'multiple': true };
 const Backy = { 'id': '307947376725721089', 'multiple': false };
 const Nana = { 'id': '544194307414949898', 'multiple': false };
@@ -90,4 +91,4 @@ for (const file of commandFiles) {
 console.log(`=================================`);
 
 // Login to Discord with your client's token
-client.login(config.token);
+client.login(process.env.TOKEN);

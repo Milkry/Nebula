@@ -6,7 +6,7 @@ module.exports = {
   aliases: ['rel'],
   run: async (client, message, args) => {
     // Access
-    const access = [client.config.myId];
+    const access = [process.env.OWNER_ID];
     if (!access.includes(message.author.id)) return;
 
     // Command Parameters

@@ -5,7 +5,7 @@ module.exports = {
     name: 'help',
     description: 'Displays a help menu',
     run: async (client, message, args) => {
-        const access = [client.config.myId];
+        const access = [process.env.OWNER_ID];
         if (!access.includes(message.author.id)) return;
 
         const helpDescription = `

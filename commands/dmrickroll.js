@@ -6,7 +6,7 @@ module.exports = {
     aliases: ['dmrr'],
     run: async (client, message, args) => {
         // Access
-        const access = [client.config.myId];
+        const access = [process.env.OWNER_ID];
         if (!access.includes(message.author.id)) return;
 
         // Command Parameters
@@ -17,7 +17,7 @@ module.exports = {
         if (!targetUser) {
             return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: You did not mention a user.`, client.theme.Fail)] });
         }
-        if (targetUser.id === client.config.myId) {
+        if (targetUser.id === process.env.OWNER_ID) {
             return message.author.send({ embeds: [await helper.createEmbedResponse(`:x: Nice try. You sussy baka!`, client.theme.Fail)] });
         }
         if (targetUser.id === client.config.clientId) {
