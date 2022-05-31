@@ -91,7 +91,7 @@ module.exports = {
                     }
                 })
                 if (!found) {
-                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: The channel requested was not found.`, client.theme.Fail)] });
+                    message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: The channel **${channel}** was not found.`, client.theme.Fail)] });
                 }
                 break;
         }

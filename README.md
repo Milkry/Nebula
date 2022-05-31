@@ -1,2 +1,2 @@
 # Memer
- A memeing bot
+A private bot by Milkry

@@ -15,13 +15,13 @@
   },
   "name": "discord-bot",
   "version": "1.0.0",
-  "description": "A memeing bot made by Milkry",
+  "description": "A private bot by Milkry",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "Meme"
+    "Discord Bot"
   ],
   "author": "Milkry",
   "license": "ISC"
