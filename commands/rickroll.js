@@ -25,7 +25,7 @@ module.exports = {
         // Process
         const channel = message.guild.channels.cache.get(channelID);
         const player = createAudioPlayer();
-        const resource = createAudioResource('sounds/NeverGonnaGiveYouUp.mp3');
+        const resource = createAudioResource('resources/sounds/NeverGonnaGiveYouUp.mp3');
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
