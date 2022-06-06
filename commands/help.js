@@ -17,8 +17,10 @@ module.exports = {
             **rel/reload** *{full_command_name}* : Reloads a specified command
             **nh/nhentai** *{code} [-s : sends as a dm]* : Responds with details about an nHentai code
             **mon/monitor** *{(s)tatus}* : Displays a list of monitored voice channels
-            **mon/monitor** *{(g)lobal} {on/off}* : Enables/Disables global monitoring
+            **mon/monitor** *{(g)lobal} {on/off}* : Enables/Disables global monitoring for the server
             **mon/monitor** *{channel_id/channel_name} {on/off}* : Enables/Disables monitoring for a specific channel
+
+            **Note:** You can get the channel id by enabling **Developer Mode** in *Advanced Settings* and right-clicking a voice channel.
         `;
 
         message.delete();
