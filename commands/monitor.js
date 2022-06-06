@@ -1,5 +1,7 @@
-const { MessageEmbed } = require('discord.js');
-const helper = require('../helper_functions.js');
+const { MessageEmbed } = require("discord.js");
+const helper = require("../helper_functions.js");
+const guildSchema = require("../Database/Schemas/Guild.js");
+const monitoringSchema = require("../Database/Schemas/Monitoring.js");
 
 module.exports = {
     name: 'monitor',
@@ -19,13 +21,17 @@ module.exports = {
             case "status":
             case "s":
                 let mlist = "";
-                if (client.monitor) { // if the global monitor setting is on
+                const guild = await guildSchema.findOne({ _id: message.guildId });
+
+                if (guild.monitoring) {
                     mlist += "[:white_check_mark:] Global Monitoring\n\n";
                 }
-                else { // if it is off
+                else {
                     mlist += "[:x:] Global Monitoring\n\n";
                 }
-                client.monitorList.forEach(voiceChannel => {
+
+                const monitoredChannels = await monitoringSchema.find({ guildId: message.guildId });
+                monitoredChannels.forEach(voiceChannel => {
                     if (voiceChannel.active) {
                         mlist += "[:white_check_mark:] " + voiceChannel.channelName + " (" + voiceChannel.access.length + " members)\n";
                     }
@@ -33,8 +39,9 @@ module.exports = {
                         mlist += "[:x:] " + voiceChannel.channelName + " (" + voiceChannel.access.length + " members)\n";
                     }
                 });
+
                 const msg = new MessageEmbed()
-                    .setTitle('Monitor Status')
+                    .setTitle('Monitoring Status')
                     .setDescription(mlist)
                     .setColor(client.theme.Neutral)
                 message.channel.send({ embeds: [msg] });
@@ -47,11 +54,11 @@ module.exports = {
                     return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: A second parameter was not given. It must be either **On** or **Off**.`, client.theme.Fail)] });
                 }
                 if (status.toLowerCase() === "on") {
-                    client.monitor = true;
+                    await guildSchema.updateOne({ _id: message.guildId }, { monitoring: true })
                     message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: Global channel monitoring is now **ENABLED**.`, client.theme.Success)] });
                 }
                 else if (status.toLowerCase() === "off") {
-                    client.monitor = false;
+                    await guildSchema.updateOne({ _id: message.guildId }, { monitoring: false })
                     message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: Global channel monitoring is now **DISABLED**.`, client.theme.Success)] });
                 }
                 else {
@@ -73,23 +80,24 @@ module.exports = {
 
                 // Process the command
                 let found = false;
-                client.monitorList.forEach(voiceChannel => {
-                    if (voiceChannel.channelId === channel || voiceChannel.channelName.toLowerCase() === channel.toLowerCase()) {
+                const channels = await monitoringSchema.find({ guildId: message.guildId });
+                for (let voiceChannel of channels) {
+                    if (voiceChannel._id === channel || voiceChannel.channelName.toLowerCase() === channel.toLowerCase()) {
                         if (status.toLowerCase() === "on") {
-                            voiceChannel.active = true;
+                            await monitoringSchema.updateOne({ _id: voiceChannel._id }, { active: true });
                             const msg = new MessageEmbed()
                                 .setDescription(`Channel monitoring for __${voiceChannel.channelName}__ has been **ENABLED**.`);
                             message.channel.send({ embeds: [msg] });
                         }
                         else {
-                            voiceChannel.active = false;
+                            await monitoringSchema.updateOne({ _id: voiceChannel._id }, { active: false });
                             const msg = new MessageEmbed()
                                 .setDescription(`Channel monitoring for __${voiceChannel.channelName}__ has been **DISABLED**.`);
                             message.channel.send({ embeds: [msg] });
                         }
                         found = true;
                     }
-                })
+                }
                 if (!found) {
                     message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: The channel **${channel}** was not found.`, client.theme.Fail)] });
                 }

@@ -2,41 +2,11 @@
 require('dotenv').config();
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
+const mongoose = require('mongoose');
 const config = require("./config.json");
 //////////////////////////////////////////////////////////////
 
 ///////////////////////// Variables ///////////////////////////
-let monitorVoiceChannelsGlobal = true;
-const Milkry = { 'id': process.env.OWNER_ID, 'multiple': true };
-const Zyjen = { 'id': '190881082894188544', 'multiple': true };
-const Backy = { 'id': '307947376725721089', 'multiple': false };
-const Nana = { 'id': '544194307414949898', 'multiple': false };
-let monitorList = [
-	{
-		channelName: 'Penthouse',
-		channelId: '797450771628163103',
-		access: [Milkry, Backy, Zyjen],
-		active: true,
-	},
-	{
-		channelName: 'Boardroom',
-		channelId: '553253000987279360',
-		access: [Milkry, Backy, Nana],
-		active: true,
-	},
-	{
-		channelName: 'Study Lounge',
-		channelId: '952180093550202890',
-		access: [Milkry, Backy, Nana],
-		active: true,
-	}/*,
-	{
-		channelName: 'General',
-		channelId: '920652294322806788',
-		access: [Milkry, { 'id': '878207188672327690', 'multiple': false }],
-		active: true,
-	}*/
-];
 const theme = {
 	Neutral: "#bf52ff",
 	Success: "#7aff14",
@@ -54,41 +24,51 @@ const client = new Client({
 	]
 });
 
-// Start
-client.once('ready', () => {
-	client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
-	global.channelBusyState = [false, false, false, false]; // we could change this to get the people who are already on the channels
-	console.log(' <!> Bot is Ready <!> ');
-});
-
 // This makes variables accessible from anywhere
 client.config = config;
-client.monitor = monitorVoiceChannelsGlobal;
-client.monitorList = monitorList;
 client.theme = theme;
 client.commands = new Collection();
 
+// Start
+client.once('ready', async () => {
+	// Handlers
+	InitializeEventHandler();
+	InitializeCommandHandler();
+
+	// Connect to database
+	await mongoose.connect(process.env.DATABASE_URI, { keepAlive: true })
+		.then(() => console.log(' [!] Connection to database established! [!] '))
+		.catch(e => console.error(' [X] Connection to database ended in failure. [X] \n', e));
+
+	client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
+	console.log(' <!> Bot is Ready <!> ');
+});
+
 // Event Handler
-const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
-for (const file of events) {
-	const eventName = file.split(".")[0];
-	const event = require(`./events/${file}`);
-	client.on(eventName, (...args) => event.execute(...args, client));
+function InitializeEventHandler() {
+	const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
+	for (const file of events) {
+		const eventName = file.split(".")[0];
+		const event = require(`./events/${file}`);
+		client.on(eventName, (...args) => event.execute(...args, client));
+	}
 }
 
 // Command Handler
-console.log(`=================================`);
-console.log(`Attempting to load commands...`);
-console.log(`=================================`);
-const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
-for (const file of commandFiles) {
-	const commandName = file.split(".")[0];
-	const command = require(`./commands/${file}`);
+function InitializeCommandHandler() {
+	console.log(`=============================`);
+	console.log(`Loading all commands...`);
+	console.log(`=============================`);
+	const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+	for (const file of commandFiles) {
+		const commandName = file.split(".")[0];
+		const command = require(`./commands/${file}`);
 
-	client.commands.set(commandName, command);
-	console.log(`loaded > ${commandName}`);
+		client.commands.set(commandName, command);
+		console.log(`loaded > ${commandName}`);
+	}
+	console.log(`=============================`);
 }
-console.log(`=================================`);
 
-// Login to Discord with your client's token
+// Bot Login
 client.login(process.env.TOKEN);
