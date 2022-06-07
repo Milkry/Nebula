@@ -20,14 +20,14 @@ module.exports = {
             const LEAVE = oldState.channelId !== null && newState.channelId === null;
 
             if (JOINS) {
-                console.log("> Offline -> Channel");
+                //console.log("> Offline -> Channel");
                 await module.exports.handleJOIN(newState, client);
             } else if (SWITCH_CHANNEL) {
-                console.log("> Channel -> Channel");
+                //console.log("> Channel -> Channel");
                 await module.exports.handleLEAVE(oldState);
                 await module.exports.handleJOIN(newState, client);
             } else if (LEAVE) {
-                console.log("> Channel -> Offline");
+                //console.log("> Channel -> Offline");
                 await module.exports.handleLEAVE(oldState);
             } else {
                 console.error("Unknown Connection Event.");
@@ -64,8 +64,8 @@ module.exports = {
                             user.send(":arrow_down:");
                             user.send(":arrow_down:");
                         }
-                        user.send({ embeds: [module.exports.createEmbedMessage(`<@${newState.member.id}> joined <#${newState.channelId}>`, newState.member, newState.guild, client.theme.Notification)] })
-                            .then(console.log(`Activity detected on [${monitoredChannel.channelName}]. Notifying [${user.username}]...`));
+                        user.send({ embeds: [module.exports.createEmbedMessage(newState, client.theme.Notification)] })
+                            .then(() => console.log(`Activity detected on [${monitoredChannel.channelName}]. Notifying [${user.username}]...`));
                         if (member.settings.multiple) {
                             user.send(":arrow_up:");
                             user.send(":arrow_up:");
@@ -84,16 +84,20 @@ module.exports = {
 
         if (leaverChannel.access.find(x => x._id === oldState.member.id) !== undefined && await module.exports.isVoiceChannelEmpty(oldState.channel.members, leaverChannel.access)) {
             return await monitoringSchema.updateOne({ _id: leaverChannel._id }, { busy: false })
-                .then(() => console.log(`Updated Channel Busy State to [FALSE] for [${leaverChannel.channelName}]\n`));;
+                .then(() => console.log(`Updated Channel Busy State to [FALSE] for [${leaverChannel.channelName}]`));;
         }
     },
-    createEmbedMessage: (message, user, guild, theme) => {
+    createEmbedMessage: (state, theme) => {
         const notification = new MessageEmbed()
             .setColor(theme)
-            .setTitle('[<a:joinvc:852902342415482968>] Someone Joined! [<a:joinvc:852902342415482968>]')
-            .setAuthor({ name: `${guild.name}`, iconURL: guild.iconURL({ dynamic: true }) })
-            .setDescription(message)
-            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+            .setTitle(`[<a:joinvc:852902342415482968>] Someone Joined! [<a:joinvc:852902342415482968>]`)
+            .setAuthor({ name: `${state.guild.name}`, iconURL: state.guild.iconURL({ dynamic: true }) })
+            .setThumbnail(state.member.displayAvatarURL({ dynamic: true }))
+            .addFields(
+                { name: `Who:`, value: `<@${state.member.id}>`, inline: true },
+                { name: `Where:`, value: `<#${state.channelId}>`, inline: true },
+                { name: `When:`, value: `<t:${Math.floor(Date.now() / 1000)}:R>`, inline: true }
+            );
 
         return notification;
     },
