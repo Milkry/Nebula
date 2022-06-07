@@ -1,6 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
+    dbError: `:x: Something went wrong. Please contact <@${process.env.OWNER_ID}>`,
     createEmbedResponse: async (message, color) => {
         const embedMsg = new MessageEmbed()
             .setDescription(message)
