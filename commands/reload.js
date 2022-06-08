@@ -4,10 +4,9 @@ module.exports = {
   name: 'reload',
   description: 'Reloads a command without needing to restart the bot',
   aliases: ['rel'],
+  access: [process.env.OWNER_ID],
   run: async (client, message, args) => {
-    // Access
-    const access = [process.env.OWNER_ID];
-    if (!access.includes(message.author.id)) return;
+    if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
 
     // Command Parameters
     const commandName = args[0];

@@ -4,10 +4,10 @@ module.exports = {
     name: 'dmrickroll',
     description: 'Direct message a user with a rickroll gif',
     aliases: ['dmrr'],
+    access: [process.env.OWNER_ID],
     run: async (client, message, args) => {
         // Access
-        const access = [process.env.OWNER_ID];
-        if (!access.includes(message.author.id)) return;
+        if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
 
         // Command Parameters
         const targetUser = message.mentions.users.first();

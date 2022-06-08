@@ -10,11 +10,8 @@ module.exports = {
     aliases: ['mon'],
     access: [process.env.OWNER_ID],
     run: async (client, message, args) => {
+        if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
         try {
-            // Access
-            if (!module.exports.access.includes(message.author.id))
-                return message.channel.send(`<a:gigachad:944054257227825152> No`);
-
             // Command Parameters
             var context = args[0];
             var status;

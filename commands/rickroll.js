@@ -5,10 +5,10 @@ module.exports = {
     name: 'rickroll',
     description: 'Joins a channel and plays the rick roll song',
     aliases: ['rr'],
+    access: [process.env.OWNER_ID],
     run: async (client, message, args) => {
         // Access
-        const access = [process.env.OWNER_ID];
-        if (!access.includes(message.author.id)) return;
+        if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
 
         // Command Parameters
         const channelID = args[0];

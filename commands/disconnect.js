@@ -5,10 +5,10 @@ module.exports = {
     name: 'disconnect',
     description: 'Disconnects the bot from any connected voice channels',
     aliases: ['disc'],
+    access: [process.env.OWNER_ID],
     run: async (client, message, args) => {
         // Access
-        const access = [process.env.OWNER_ID];
-        if (!access.includes(message.author.id)) return;
+        if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
 
         // Process
         message.delete();
