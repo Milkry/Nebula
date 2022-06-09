@@ -1,5 +1,5 @@
 const { getVoiceConnection } = require('@discordjs/voice');
-const helper = require('../helper_functions.js')
+const helper = require('../Components/helper_functions.js');
 
 module.exports = {
     name: 'disconnect',

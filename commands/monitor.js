@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const helper = require("../helper_functions.js");
+const helper = require("../Components/helper_functions.js");
 const guildSchema = require("../Database/Schemas/Guild.js");
 const monitoringSchema = require("../Database/Schemas/Monitoring.js");
 const userSchema = require("../Database/Schemas/User.js");

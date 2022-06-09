@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const nhentai = require('nhentai-js')
-const helper = require('../helper_functions.js')
+const helper = require('../Components/helper_functions.js')
 
 module.exports = {
     name: 'nhentai',
@@ -58,7 +58,7 @@ module.exports = {
             }
         }
         catch (e) {
-            console.error(`The command [**${module.exports.name}**] has failed with an error of...`, e);
+            console.error(`The command [**${module.exports.name}**] has failed with an error of...\n`, e);
         }
     }
 }

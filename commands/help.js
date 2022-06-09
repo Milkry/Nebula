@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const helper = require('../helper_functions.js')
+const helper = require('../Components/helper_functions.js');
 
 module.exports = {
     name: 'help',
@@ -20,6 +20,7 @@ module.exports = {
             
             **nh/nhentai** *{nh_code} [-p : post to channel]* : Responds with details about an nHentai code either privately or publically
             **nh/nhentai** *{nh_code} {@user}* : DM's the user details about an nHentai code
+            **server** : Displays information about the server
         `;
 
         if (message.author.id === process.env.OWNER_ID) {
