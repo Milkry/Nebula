@@ -1,3 +1,5 @@
+const db = require("../Database/Database.js");
+
 module.exports = {
     execute: async (message, client) => {
         // Ignore all bots
@@ -18,7 +20,9 @@ module.exports = {
 
         // Run the command
         try {
-            cmd.run(client, message, args);
+            if (message.author.id !== process.env.OWNER_ID)
+                await db.log(cmd.name, message);
+            await cmd.run(client, message, args);
         } catch (error) {
             console.error(error);
         }
