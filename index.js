@@ -42,7 +42,13 @@ client.once('ready', async () => {
 		.then(() => console.log(' [!] Connection to database established! [!] '))
 		.catch(e => console.error(' [X] Connection to database ended in failure. [X] \n', e));
 
+	// Presence
 	client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
+	setInterval(() => {
+		client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
+	}, 3600000);
+
+	// Ready
 	console.log(' <!> Bot is Ready <!> ');
 });
 
