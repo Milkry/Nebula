@@ -5,12 +5,13 @@ const monitoringSchema = require("../Database/Schemas/Monitoring.js");
 const userSchema = require("../Database/Schemas/User.js");
 
 module.exports = {
+    active: true,
     name: 'monitor',
     description: 'Disables notifications for a specific voice channel or for all voice channels.',
     aliases: ['mon'],
     access: [process.env.OWNER_ID],
+    cooldown: 0,
     run: async (client, message, args) => {
-        if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
         try {
             // Command Parameters
             var context = args[0];
@@ -351,17 +352,13 @@ module.exports = {
                 //#endregion
 
                 default:
-                    let response = await helper.createEmbedResponse(`:x: Unknown command syntax. Please refer to **.help**`, client.theme.Fail);
+                    let response = await helper.createEmbedResponse(`:x: Unknown command syntax. Please refer to **${client.config.prefix}help**`, client.theme.Fail);
                     message.channel.send({ embeds: [response] });
                     break;
             }
         }
         catch (e) {
-            console.error(`The command [${module.exports.name}] has failed with an error of...\n`, e);
-            const msg = new MessageEmbed()
-                .setDescription(`Kati epien skata. <@${process.env.OWNER_ID}> ela sastaaa.`)
-                .setColor(client.theme.Neutral)
-            message.channel.send({ embeds: [msg] });
+            helper.reportCommandError(e, client.theme.Fail, message, module.exports.name);
         }
     }
 }

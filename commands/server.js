@@ -2,15 +2,14 @@ const { MessageEmbed } = require('discord.js');
 const helper = require('../Components/helper_functions.js');
 
 module.exports = {
+    active: true,
     name: 'server',
     description: 'Displays details about the current server.',
     aliases: [],
     access: [],
+    cooldown: 0,
     run: async (client, message, args) => {
         try {
-            // Access
-            if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
-
             // Process
             const guild = message.guild;
             if (!guild.available) return console.error("Guild is not available at this time...");
@@ -25,27 +24,27 @@ module.exports = {
             for (const guildMember of guildMembers) {
                 if (guildMember.user.bot) bots++;
                 else {
-                    let presence = guildMember.presence !== null;
+                    const isOnline = !(guildMember.presence?.status === undefined || guildMember.presence?.status === "offline");
 
                     // Owners [Skip]
                     if (guildMember.roles.cache.some(role => role.name === "Owners")) continue;
 
                     // Admins
                     if (guildMember.roles.cache.some(role => role.name === "Admins")) {
-                        if (presence) onlineAdmins++;
+                        if (isOnline) onlineAdmins++;
                         totalAdmins++;
                         continue;
                     }
 
                     // Mods
                     if (guildMember.roles.cache.some(role => role.name === "Moderators")) {
-                        if (presence) onlineMods++;
+                        if (isOnline) onlineMods++;
                         totalMods++;
                         continue;
                     }
 
                     // Members
-                    if (presence) onlineMembers++;
+                    if (isOnline) onlineMembers++;
                     totalMembers++;
                 }
             }
@@ -69,7 +68,7 @@ module.exports = {
             message.channel.send({ embeds: [response] });
         }
         catch (e) {
-            console.error(`The command [**${module.exports.name}**] has failed with an error of...\n`, e);
+            helper.reportCommandError(e, client.theme.Fail, message, module.exports.name);
         }
     }
 }

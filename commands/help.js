@@ -2,18 +2,18 @@ const { MessageEmbed } = require("discord.js");
 const helper = require('../Components/helper_functions.js');
 
 module.exports = {
+    active: true,
     name: 'help',
     description: 'Displays a help menu with available commands',
     aliases: [],
     access: [],
+    cooldown: 0,
     run: async (client, message, args) => {
-        // Access
-        if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
+        try {
+            var helpDescription = "";
+            var ownerHelp = "";
 
-        var helpDescription = "";
-        var ownerHelp = "";
-
-        helpDescription = `
+            helpDescription = `
             Prefix: [ **.** ]
 
             **Note:** You can get the channel id by enabling **Developer Mode** in *Advanced Settings* and right-clicking a voice channel.
@@ -21,10 +21,11 @@ module.exports = {
             **nh/nhentai** *{nh_code} [-p : post to channel]* : Responds with details about an nHentai code either privately or publically
             **nh/nhentai** *{nh_code} {@user}* : DM's the user details about an nHentai code
             **server** : Displays information about the server
+
         `;
 
-        if (message.author.id === process.env.OWNER_ID) {
-            ownerHelp = `
+            if (message.author.id === process.env.OWNER_ID) {
+                ownerHelp = `
                 **rr/rickroll** *{channel_id}* : Bot joins the voice channel and starts playing rick roll
                 **dmrr/dmrickroll** *{@user}* : DMs the specified user a little surprise :)
                 **disc/disconnect** : Disconnects the bot from the voice channel
@@ -38,13 +39,17 @@ module.exports = {
                 **mon/monitor** *remove {channel_id} [@user]* : Removes a user from the access list of a specific monitored channel
                 **mon/monitor** *remove {channel_id}* : Removes the channel from the monitor list
             `;
-        }
+            }
 
-        await message.delete();
-        const helpMenu = new MessageEmbed()
-            .setColor(client.theme.Notification)
-            .setTitle('Help Menu')
-            .setDescription(helpDescription + ownerHelp)
-        message.author.send({ embeds: [helpMenu] });
+            await message.delete();
+            const helpMenu = new MessageEmbed()
+                .setColor(client.theme.Notification)
+                .setTitle('Help Menu')
+                .setDescription(helpDescription + ownerHelp)
+            message.author.send({ embeds: [helpMenu] });
+        }
+        catch (e) {
+            helper.reportCommandError(e, client.theme.Fail, message, module.exports.name);
+        }
     }
 }

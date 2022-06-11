@@ -18,10 +18,12 @@ module.exports = {
         const user = await client.users.fetch(Id);
         return user.username;
     },
-    hasAccess: (access, user) => {
-        if (access.length === 0) return false; // Has access
-        if (access.includes(user)) return false; // Has access
-        return true; // Doesn't have access
+    reportCommandError: (error, color, message, cmd) => {
+        console.error(`The command [${cmd}] has failed with an error of...\n`, error);
+        const msg = new MessageEmbed()
+            .setDescription(`Kati epien skata. <@${process.env.OWNER_ID}> ela sastaaa.`)
+            .setColor(color)
+        message.channel.send({ embeds: [msg] });
     }
 }
 

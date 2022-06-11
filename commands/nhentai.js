@@ -3,14 +3,13 @@ const nhentai = require('nhentai-js')
 const helper = require('../Components/helper_functions.js')
 
 module.exports = {
+    active: true,
     name: 'nhentai',
     description: 'Resolves nhentai codes to doujins',
     aliases: ['nh'],
     access: [],
+    cooldown: 0,
     run: async (client, message, args) => {
-        // Access
-        if (helper.hasAccess(module.exports.access, message.author.id)) return message.channel.send(helper.noPermission);
-
         try {
             // Command Parameters
             const nhentaiCode = args[0];
@@ -58,7 +57,7 @@ module.exports = {
             }
         }
         catch (e) {
-            console.error(`The command [**${module.exports.name}**] has failed with an error of...\n`, e);
+            helper.reportCommandError(e, client.theme.Fail, message, module.exports.name);
         }
     }
 }
