@@ -24,6 +24,7 @@ module.exports = {
             // Process
             await guildSchema.updateOne({ _id: message.guild.id }, { prefix: newPrefix })
                 .then(async () => {
+                    message.guild.prefix = newPrefix;
                     let response = await helper.createEmbedResponse(`:white_check_mark: Prefix has been set \`${newPrefix}\``, client.theme.Success);
                     return message.channel.send({ embeds: [response] });
                 })
