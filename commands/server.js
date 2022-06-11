@@ -6,7 +6,9 @@ module.exports = {
     name: 'server',
     description: 'Displays details about the current server.',
     aliases: [],
-    access: [],
+    developerOnly: false,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {
@@ -62,7 +64,7 @@ module.exports = {
                     { name: `Online Admins`, value: `${onlineAdmins}/${totalAdmins}`, inline: true },
                     { name: `Online Mods`, value: `${onlineMods}/${totalMods}`, inline: true },
                     { name: `Online Members`, value: `${onlineMembers}/${totalMembers}`, inline: true },
-                    { name: `All Members`, value: `${guild.memberCount}`, inline: true },
+                    { name: `Everyone`, value: `${guild.memberCount}`, inline: true },
                 ])
                 .setTimestamp();
             message.channel.send({ embeds: [response] });

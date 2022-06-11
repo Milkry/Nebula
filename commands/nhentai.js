@@ -7,7 +7,9 @@ module.exports = {
     name: 'nhentai',
     description: 'Resolves nhentai codes to doujins',
     aliases: ['nh'],
-    access: [],
+    developerOnly: false,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {

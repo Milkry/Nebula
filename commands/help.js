@@ -6,14 +6,16 @@ module.exports = {
     name: 'help',
     description: 'Displays a help menu with available commands',
     aliases: [],
-    access: [],
+    developerOnly: false,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {
             var helpDescription = ``;
 
             helpDescription += `
-                Prefix: [ **.** ]
+                Prefix: [ \`${message.guild.prefix}\` ]
             
                 🞛 **nh/nhentai <nh_code> [-p : respond to channel]** : Responds with details about a doujin
                 🞛 **nh/nhentai <nh_code> <@user>** : DM's the user details about a doujin

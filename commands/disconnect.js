@@ -6,7 +6,9 @@ module.exports = {
     name: 'disconnect',
     description: 'Disconnects the bot from any connected voice channels',
     aliases: ['disc'],
-    access: [process.env.OWNER_ID],
+    developerOnly: true,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {

@@ -10,7 +10,7 @@ module.exports = {
             })
             await guildDB.save()
                 .then(() => console.log("Added new Guild to database!"))
-                .catch(err => console.log("Failed to add new guild to database... \n", err));
+                .catch(err => console.error("Failed to add new guild to database... \n", err));
         }
         catch (e) {
             console.error("An unknown event error has occurred...\n", e);

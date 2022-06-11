@@ -9,7 +9,9 @@ module.exports = {
     name: 'monitor',
     description: 'Disables notifications for a specific voice channel or for all voice channels.',
     aliases: ['mon'],
-    access: [process.env.OWNER_ID],
+    developerOnly: true,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {
@@ -352,7 +354,7 @@ module.exports = {
                 //#endregion
 
                 default:
-                    let response = await helper.createEmbedResponse(`:x: Unknown command syntax. Please refer to **${client.config.prefix}help**`, client.theme.Fail);
+                    let response = await helper.createEmbedResponse(`:x: Unknown command syntax. Please refer to **${message.guild.prefix}help**`, client.theme.Fail);
                     message.channel.send({ embeds: [response] });
                     break;
             }

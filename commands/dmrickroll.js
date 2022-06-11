@@ -5,7 +5,9 @@ module.exports = {
     name: 'dmrickroll',
     description: 'Direct message a user with a rickroll gif',
     aliases: ['dmrr'],
-    access: [process.env.OWNER_ID],
+    developerOnly: true,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {

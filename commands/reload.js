@@ -5,7 +5,9 @@ module.exports = {
     name: 'reload',
     description: 'Reloads a command without needing to restart the bot',
     aliases: ['rel'],
-    access: [process.env.OWNER_ID],
+    developerOnly: true,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {

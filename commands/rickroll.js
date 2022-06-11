@@ -6,7 +6,9 @@ module.exports = {
     name: 'rickroll',
     description: 'Joins a channel and plays the rick roll song',
     aliases: ['rr'],
-    access: [process.env.OWNER_ID],
+    developerOnly: true,
+    permissionBypassers: [],
+    permissions: [],
     cooldown: 0,
     run: async (client, message, args) => {
         try {
