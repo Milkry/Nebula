@@ -46,7 +46,7 @@ client.once('ready', async () => {
 	client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
 	setInterval(() => {
 		client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
-	}, 3600000);
+	}, 1800000);
 
 	// Ready
 	console.log(' <!> Bot is Ready <!> ');
