@@ -81,11 +81,25 @@ module.exports = {
                         }
 
                         // Process
+                        // Check if the channel is being monitored
                         let isMonitored = await monitoringSchema.findOne({ _id: channel.id }).select("_id").lean() !== null;
 
+                        // If user does not exist in the database then add them
+                        let isUser = await userSchema.findOne({ _id: user.id }).select("_id").lean() !== null;
+                        if (!isUser) {
+                            let newUser = await userSchema({
+                                _id: user.id,
+                                user: {
+                                    username: user.username,
+                                    discriminator: user.discriminator
+                                }
+                            })
+                            newUser.save().catch(e => console.error(e));
+                        }
+
+                        let member = await userSchema.findOne({ _id: user.id });
                         if (isMonitored) { // If in database
                             // Add only user
-                            let member = await userSchema.findOne({ _id: user.id });
                             await monitoringSchema.updateOne({ _id: channel.id }, { $push: { access: member } })
                                 .then(async () => {
                                     let response = await helper.createEmbedResponse(`:white_check_mark: User was added to <#${channel.id}>`, client.theme.Success);
@@ -102,7 +116,6 @@ module.exports = {
                             let response = await helper.createEmbedResponse(`:warning: <#${channel.id}> is not a monitored channel. Adding it...`, client.theme.Notification);
                             message.channel.send({ embeds: [response] });
 
-                            let member = await userSchema.findOne({ _id: user.id });
                             let newMonitoredChannel = await monitoringSchema({
                                 _id: channel.id,
                                 channelName: channel.name,
