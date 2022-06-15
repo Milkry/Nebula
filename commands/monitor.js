@@ -94,11 +94,12 @@ module.exports = {
                                     discriminator: user.discriminator
                                 }
                             })
-                            newUser.save().catch(e => console.error(e));
+                            await newUser.save().catch(e => console.error(e));
                         }
-
                         let member = await userSchema.findOne({ _id: user.id });
-                        if (isMonitored) { // If in database
+
+                        // Handle the channel
+                        if (isMonitored) {
                             // Add only user
                             await monitoringSchema.updateOne({ _id: channel.id }, { $push: { access: member } })
                                 .then(async () => {
@@ -230,7 +231,7 @@ module.exports = {
                             monitorlist += ":x: ⮞ Global Server Monitoring";
                         monitorlist += "\n\n\n";
 
-                        const monitoredChannels = await monitoringSchema.find({ _id: message.guildId });
+                        const monitoredChannels = await monitoringSchema.find({ guildId: message.guildId });
                         monitoredChannels.forEach(voiceChannel => {
                             if (voiceChannel.active)
                                 monitorlist += `:white_check_mark: ⮞〖${voiceChannel._id}〗[<#${voiceChannel._id}>] (${voiceChannel.access.length} members)`;
