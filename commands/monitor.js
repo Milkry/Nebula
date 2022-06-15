@@ -230,7 +230,7 @@ module.exports = {
                             monitorlist += ":x: ⮞ Global Server Monitoring";
                         monitorlist += "\n\n\n";
 
-                        const monitoredChannels = await monitoringSchema.find({ guildId: message.guildId });
+                        const monitoredChannels = await monitoringSchema.find({ _id: message.guildId });
                         monitoredChannels.forEach(voiceChannel => {
                             if (voiceChannel.active)
                                 monitorlist += `:white_check_mark: ⮞〖${voiceChannel._id}〗[<#${voiceChannel._id}>] (${voiceChannel.access.length} members)`;
