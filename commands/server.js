@@ -51,13 +51,20 @@ module.exports = {
                 }
             }
 
+            let boosterTier;
+            if (guild.premiumTier === "NONE") boosterTier = "None";
+            else if (guild.premiumTier === "TIER_1") boosterTier = "Tier 1";
+            else if (guild.premiumTier === "TIER_2") boosterTier = "Tier 2";
+            else if (guild.premiumTier === "TIER_3") boosterTier = "Tier 3";
+            else boosterTier = "Unknown";
+
             const response = new MessageEmbed()
                 .setColor(client.theme.Neutral)
                 .setTitle(`Server Statistics [${guild.name}]`)
                 .setThumbnail(guild.iconURL())
                 .addFields([
                     { name: `Created At`, value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`, inline: true },
-                    { name: `Boost Tier`, value: `${guild.premiumTier}`, inline: true },
+                    { name: `Boost Tier`, value: `${boosterTier}`, inline: true },
                     { name: `Boosters`, value: `${guild.premiumSubscriptionCount}`, inline: true },
                     { name: `Owner`, value: `${guildOwner.user.username}#${guildOwner.user.discriminator}`, inline: true },
                     { name: `Bots`, value: `${bots}`, inline: true },
