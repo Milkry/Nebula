@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = mongoose.model('Logs', new mongoose.Schema({
-    command: { type: String },
+    command: { type: String, default: "Unknown" },
     executor: {
         id: { type: String },
         name: { type: String }

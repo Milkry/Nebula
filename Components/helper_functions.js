@@ -9,6 +9,12 @@ module.exports = {
             .setColor(color);
         return embedMsg;
     },
+    createEmbedResponseAndSend: async (message, color, channel) => {
+        const embedMsg = new MessageEmbed()
+            .setDescription(message)
+            .setColor(color);
+        await channel.send({ embeds: [embedMsg] });
+    },
     sleep: async (ms) => {
         return new Promise((resolve) => {
             setTimeout(resolve, ms);
@@ -26,6 +32,3 @@ module.exports = {
         message.channel.send({ embeds: [msg] });
     }
 }
-
-//message.channel.send({ embeds: [await helper.createEmbedResponse(``)] });
-//await sleep(ms);

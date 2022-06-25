@@ -20,10 +20,10 @@ module.exports = {
 
             // Validate
             if (!nhentaiCode) {
-                return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: Code not provided. Please include one.', client.theme.Fail)] });
+                return helper.createEmbedResponseAndSend(`:x: Code not provided. Please include one`, client.theme.Fail, message.channel);
             }
             if (isNaN(nhentaiCode) || nhentaiCode <= 0) {
-                return message.channel.send({ embeds: [await helper.createEmbedResponse(':x: This is not a valid nHentai code. Please input a new one.', client.theme.Fail)] });
+                return helper.createEmbedResponseAndSend(`:x: This is not a valid nHentai code. Please input a new one`, client.theme.Fail, message.channel);
             }
 
             // Process
@@ -55,7 +55,7 @@ module.exports = {
             catch (e) {
                 console.error(e);
                 await message.delete();
-                await message.author.send(`This is either not a valid doujin number or the servers are busy. Please try again.`);
+                helper.createEmbedResponseAndSend(`This is either not a valid doujin number or the servers are busy. Please try again`, client.theme.Fail, message.author);
             }
         }
         catch (e) {

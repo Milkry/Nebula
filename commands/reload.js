@@ -16,10 +16,10 @@ module.exports = {
 
             // Validate
             if (!commandName) {
-                return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: Must provide a command to reload.`, client.theme.Fail)] });
+                return helper.createEmbedResponseAndSend(`:x: Must provide a command to reload`, client.theme.Fail, message.channel);
             }
             if (!client.commands.has(commandName)) { // Check if the command exists and is valid
-                return message.channel.send({ embeds: [await helper.createEmbedResponse(`:x: This command does not exist.`, client.theme.Fail)] });
+                return helper.createEmbedResponseAndSend(`:x: This command does not exist`, client.theme.Fail, message.channel);
             }
 
             // Process
@@ -28,7 +28,7 @@ module.exports = {
             client.commands.delete(commandName);
             const props = require(`./${commandName}.js`);
             client.commands.set(commandName, props);
-            message.channel.send({ embeds: [await helper.createEmbedResponse(`:white_check_mark: **${commandName}** has been reloaded.`, client.theme.Success)] });
+            helper.createEmbedResponseAndSend(`:white_check_mark: **${commandName}** has been reloaded`, client.theme.Success, message.channel);
         }
         catch (e) {
             helper.reportCommandError(e, client.theme.Fail, message, module.exports.name);

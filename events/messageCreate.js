@@ -1,4 +1,3 @@
-const db = require("../Database/Database.js");
 const helper = require("../Components/helper_functions.js");
 const guildSchema = require("../Database/Schemas/Guild.js");
 
@@ -35,22 +34,22 @@ module.exports = {
             const isDeveloper = message.author.id === process.env.OWNER_ID;
 
             // If the command is inactive then exit
-            if (!cmd.active) return message.channel.send(`This command is currently inactive.`);
+            if (!cmd.active) return helper.createEmbedResponseAndSend(`:x: This command is currently inactive`, client.theme.Fail, message.channel);
 
             // If the command is only available to the developer(s) and the author is not one of them then exit
-            if (cmd.developerOnly && !isDeveloper) return message.channel.send(`This command is for developers only.`);
+            if (cmd.developerOnly && !isDeveloper) return helper.createEmbedResponseAndSend(`:x: This command is for developers only`, client.theme.Fail, message.channel);
 
             // If the author doesn't have access to that command then exit
             if (!isDeveloper) {
                 if (cmd.permissionBypassers.length === 0 || (cmd.permissionBypassers.length !== 0 && !cmd.permissionBypassers.includes(message.author.id))) {
                     const member = await message.guild.members.fetch(message.author.id);
-                    if (!member.permissions.has(cmd.permissions)) return message.channel.send(helper.noPermission);
+                    if (!member.permissions.has(cmd.permissions)) return helper.createEmbedResponseAndSend(helper.noPermission, client.theme.Fail, message.channel);
                 }
             }
 
             // Run the command
             if (!isDeveloper)
-                await db.log(cmd.name, message);
+                await client.Database.log(cmd.name, message);
             await cmd.run(client, message, args);
         }
         catch (e) {

@@ -6,7 +6,7 @@ module.exports = {
     name: 'setprefix',
     description: 'Sets the server new prefix',
     aliases: [],
-    developerOnly: true,
+    developerOnly: false,
     permissionBypassers: [],
     permissions: ["ADMINISTRATOR"],
     cooldown: 0,
@@ -17,21 +17,18 @@ module.exports = {
 
             // Validate
             if (!newPrefix) {
-                let response = await helper.createEmbedResponse(`:x: You must provide a new prefix`, client.theme.Fail);
-                return message.channel.send({ embeds: [response] });
+                return helper.createEmbedResponseAndSend(`:x: You must provide a new prefix`, client.theme.Fail, message.channel);
             }
 
             // Process
             await guildSchema.updateOne({ _id: message.guild.id }, { prefix: newPrefix })
                 .then(async () => {
                     message.guild.prefix = newPrefix;
-                    let response = await helper.createEmbedResponse(`:white_check_mark: Prefix has been set \`${newPrefix}\``, client.theme.Success);
-                    return message.channel.send({ embeds: [response] });
+                    return helper.createEmbedResponseAndSend(`:white_check_mark: Prefix has been set \`${newPrefix}\``, client.theme.Success, message.channel);
                 })
                 .catch(async (e) => {
                     console.error(e);
-                    let response = await helper.createEmbedResponse(`:x: Could not set new prefix \`${newPrefix}\``, client.theme.Fail);
-                    return message.channel.send({ embeds: [response] });
+                    return helper.createEmbedResponseAndSend(`:x: Could not set new prefix \`${newPrefix}\``, client.theme.Fail, message.channel);
                 });
         }
         catch (e) {

@@ -4,6 +4,7 @@ const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const config = require("./config.json");
+const Database = require("./Database/Database.js");
 //////////////////////////////////////////////////////////////
 
 ///////////////////////// Variables ///////////////////////////
@@ -29,6 +30,7 @@ const client = new Client({
 // This makes variables accessible from anywhere
 client.config = config;
 client.theme = theme;
+client.Database = Database;
 client.commands = new Collection();
 
 // Start
