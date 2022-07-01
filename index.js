@@ -39,16 +39,17 @@ client.once('ready', async () => {
 	InitializeEventHandler();
 	InitializeCommandHandler();
 
+	// Presence
+	const presence = { activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' };
+	client.user.setPresence(presence);
+	setInterval(() => {
+		client.user.setPresence(presence);
+	}, 1800000);
+
 	// Connect to database
 	await mongoose.connect(process.env.DATABASE_URI, { keepAlive: true })
 		.then(() => console.log(' [!] Connection to database established! [!] '))
 		.catch(e => console.error(' [X] Connection to database ended in failure. [X] \n', e));
-
-	// Presence
-	client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
-	setInterval(() => {
-		client.user.setPresence({ activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' });
-	}, 1800000);
 
 	// Ready
 	console.log(' <!> Bot is Ready <!> ');
