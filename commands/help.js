@@ -15,11 +15,12 @@ module.exports = {
             var helpDescription = ``;
 
             helpDescription += `
-                Prefix: [ \`${message.guild.prefix}\` ]
+                Prefix: [ \` ${message.guild.prefix} \` ]
             
                 🞛 **nh/nhentai <nh_code> [-p : respond to channel]** : Responds with details about a doujin
                 🞛 **nh/nhentai <nh_code> <@user>** : DM's the user details about a doujin
                 🞛 **server** : Displays information about the server
+                🞛 **info/bot** : Displays information about me :)
             `;
 
             if (message.author.id === process.env.OWNER_ID) {

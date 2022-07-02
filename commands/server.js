@@ -66,7 +66,7 @@ module.exports = {
                     { name: `Created At`, value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`, inline: true },
                     { name: `Boost Tier`, value: `${boosterTier}`, inline: true },
                     { name: `Boosters`, value: `${guild.premiumSubscriptionCount}`, inline: true },
-                    { name: `Owner`, value: `${guildOwner.user.username}#${guildOwner.user.discriminator}`, inline: true },
+                    { name: `Owner`, value: `${guildOwner.user.tag}`, inline: true },
                     { name: `Bots`, value: `${bots}`, inline: true },
                     { name: `Online Admins`, value: `${onlineAdmins}/${totalAdmins}`, inline: true },
                     { name: `Online Mods`, value: `${onlineMods}/${totalMods}`, inline: true },
