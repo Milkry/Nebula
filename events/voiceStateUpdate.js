@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const helper = require("../Components/helper_functions.js");
 const guildSchema = require("../Database/Schemas/Guild.js");
 const monitoringSchema = require("../Database/Schemas/Monitoring.js");
@@ -88,7 +88,7 @@ module.exports = {
         }
     },
     createEmbedMessage: (state, theme) => {
-        const notification = new MessageEmbed()
+        const notification = new EmbedBuilder()
             .setColor(theme)
             .setTitle(`[<a:joinvc:852902342415482968>] Someone Joined! [<a:joinvc:852902342415482968>]`)
             .setAuthor({ name: `${state.guild.name}`, iconURL: state.guild.iconURL({ dynamic: true }) })

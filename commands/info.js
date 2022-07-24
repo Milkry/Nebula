@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const helper = require('../Components/helper_functions.js');
 const monitoringSchema = require("../Database/Schemas/Monitoring.js");
 
@@ -20,7 +20,7 @@ module.exports = {
             let usedRam = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
             let totalRam = (process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2);
 
-            const msg = new MessageEmbed()
+            const msg = new EmbedBuilder()
                 .setColor(client.theme.Neutral)
                 .setTitle("Information about me")
                 .addFields([

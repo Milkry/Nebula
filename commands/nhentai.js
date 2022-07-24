@@ -1,9 +1,9 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const nhentai = require('nhentai-js')
 const helper = require('../Components/helper_functions.js')
 
 module.exports = {
-    active: true,
+    active: false,
     name: 'nhentai',
     description: 'Resolves nhentai codes to doujins',
     aliases: ['nh'],
@@ -29,27 +29,31 @@ module.exports = {
             // Process
             try {
                 if (await nhentai.exists(nhentaiCode)) {
-                    const dojin = await nhentai.getDoujin(nhentaiCode);
-                    const response = new MessageEmbed()
+                    const doujin = await nhentai.getDoujin(nhentaiCode);
+                    const response = new EmbedBuilder()
                         .setColor(client.theme.Neutral)
-                        .setTitle(dojin.title)
-                        .setDescription(`**Link:** ${dojin.link}\n**Languages:** ${dojin.details.languages}\n**Tags:** ${dojin.details.tags}\n**Length:** ${dojin.details.pages} page(s)\n**Uploaded:** ${dojin.details.uploaded}`)
-                        .setImage(dojin.thumbnails[0])
+                        .setTitle(doujin.title)
+                        .setDescription(`**Link:** ${doujin.link}\n**Languages:** ${doujin.details.languages}\n**Tags:** ${doujin.details.tags}\n**Length:** ${doujin.details.pages} page(s)\n**Uploaded:** ${doujin.details.uploaded}`)
+                        .setImage(doujin.thumbnails[0])
                         .setThumbnail("https://i.imgur.com/uLAimaY.png")
                         .setTimestamp();
 
-                    if (publicMode === '-p') {
-                        await message.channel.send({ embeds: [response] });
+                    if (publicMode === "-p") {
+                        message.channel.send({ embeds: [response] });
                     }
                     else if (user) {
-                        await message.delete();
+                        message.delete();
                         await user.send(`From <@${message.author.id}>`);
                         await user.send({ embeds: [response] });
                     }
                     else {
-                        await message.delete();
-                        await message.author.send({ embeds: [response] });
+                        message.delete();
+                        message.author.send({ embeds: [response] });
                     }
+                }
+                else {
+                    message.delete();
+                    helper.createEmbedResponseAndSend(`:x: The doujin requested with code [${nhentaiCode}] does not exist.`, client.theme.Fail, message.author);
                 }
             }
             catch (e) {

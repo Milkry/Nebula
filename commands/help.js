@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const helper = require('../Components/helper_functions.js');
 
 module.exports = {
@@ -41,8 +41,8 @@ module.exports = {
                 helpDescription += `\n**Note**: You can get the channel id by enabling __Developer Mode__ in *Advanced Settings* and right-clicking on a voice channel.`;
             }
 
-            await message.delete();
-            const helpMenu = new MessageEmbed()
+            message.delete();
+            const helpMenu = new EmbedBuilder()
                 .setColor(client.theme.Notification)
                 .setAuthor({ name: `Nebula`, iconURL: client.user.avatarURL({ dynamic: true }) })
                 .setTitle(`:scroll: **HELP MENU** :scroll:`)

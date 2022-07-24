@@ -1,4 +1,5 @@
-const { MessageEmbed } = require('discord.js');
+const { GuildPremiumTier } = require('discord-api-types/v10');
+const { EmbedBuilder } = require('discord.js');
 const helper = require('../Components/helper_functions.js');
 
 module.exports = {
@@ -52,13 +53,13 @@ module.exports = {
             }
 
             let boosterTier;
-            if (guild.premiumTier === "NONE") boosterTier = "None";
-            else if (guild.premiumTier === "TIER_1") boosterTier = "Tier 1";
-            else if (guild.premiumTier === "TIER_2") boosterTier = "Tier 2";
-            else if (guild.premiumTier === "TIER_3") boosterTier = "Tier 3";
+            if (guild.premiumTier === GuildPremiumTier.None) boosterTier = "None";
+            else if (guild.premiumTier === GuildPremiumTier.Tier1) boosterTier = "Tier 1";
+            else if (guild.premiumTier === GuildPremiumTier.Tier2) boosterTier = "Tier 2";
+            else if (guild.premiumTier === GuildPremiumTier.Tier3) boosterTier = "Tier 3";
             else boosterTier = "Unknown";
 
-            const response = new MessageEmbed()
+            const response = new EmbedBuilder()
                 .setColor(client.theme.Neutral)
                 .setTitle(`Server Statistics [${guild.name}]`)
                 .setThumbnail(guild.iconURL())

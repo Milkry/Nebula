@@ -1,13 +1,14 @@
 ////////////////////////// Imports ///////////////////////////
 require('dotenv').config();
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { ActivityType } = require('discord-api-types/v10');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const config = require("./config.json");
 const Database = require("./Database/Database.js");
 //////////////////////////////////////////////////////////////
 
-///////////////////////// Variables ///////////////////////////
+///////////////////////// Variables //////////////////////////
 const theme = {
 	Neutral: "#bf52ff",
 	Success: "#7aff14",
@@ -19,13 +20,14 @@ const theme = {
 // Create a new client instance
 const client = new Client({
 	intents: [
-		Intents.FLAGS.GUILDS,
-		Intents.FLAGS.GUILD_MESSAGES,
-		Intents.FLAGS.GUILD_VOICE_STATES,
-		Intents.FLAGS.GUILD_MEMBERS,
-		Intents.FLAGS.GUILD_PRESENCES,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildPresences,
 	]
-});
+})
 
 // This makes variables accessible from anywhere
 client.config = config;
@@ -40,7 +42,7 @@ client.once('ready', async () => {
 	InitializeCommandHandler();
 
 	// Presence
-	const presence = { activities: [{ name: 'the stars...', type: "WATCHING" }], status: 'online' };
+	const presence = { activities: [{ name: 'the stars...', type: ActivityType.Watching }], status: 'online' };
 	client.user.setPresence(presence);
 	setInterval(() => {
 		client.user.setPresence(presence);
@@ -48,11 +50,11 @@ client.once('ready', async () => {
 
 	// Connect to database
 	await mongoose.connect(process.env.DATABASE_URI, { keepAlive: true })
-		.then(() => console.log(' [!] Connection to database established! [!] '))
-		.catch(e => console.error(' [X] Connection to database ended in failure. [X] \n', e));
+		.then(() => console.log('[✓] Connection to database established! [✓]'))
+		.catch(e => console.error('[X] Connection to database ended in failure.[X]\n', e));
 
 	// Ready
-	console.log(' <!> Bot is Ready <!> ');
+	console.log('[✓] Ready [✓]');
 });
 
 // Event Handler

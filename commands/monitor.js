@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const helper = require("../Components/helper_functions.js");
 const guildSchema = require("../Database/Schemas/Guild.js");
 const monitoringSchema = require("../Database/Schemas/Monitoring.js");
@@ -41,7 +41,7 @@ module.exports = {
                         let response = await helper.createEmbedResponse(`:x: This channel does not exist`, client.theme.Fail);
                         return message.channel.send({ embeds: [response] });
                     }
-                    if (channel.type !== "GUILD_VOICE") {
+                    if (!channel.isVoiceBased) {
                         let response = await helper.createEmbedResponse(`:x: This channel is not a voice channel`, client.theme.Fail);
                         return message.channel.send({ embeds: [response] });
                     }
@@ -158,7 +158,7 @@ module.exports = {
                         let response = await helper.createEmbedResponse(`:x: The channel given does not exist`, client.theme.Fail);
                         return message.channel.send({ embeds: [response] });
                     }
-                    if (channel.type !== "GUILD_VOICE") {
+                    if (!channel.isVoiceBased) {
                         let response = await helper.createEmbedResponse(`:x: The channel given is not a voice channel`, client.theme.Fail);
                         return message.channel.send({ embeds: [response] });
                     }
@@ -240,7 +240,7 @@ module.exports = {
                             monitorlist += "\n\n";
                         });
 
-                        const msg = new MessageEmbed()
+                        const msg = new EmbedBuilder()
                             .setTitle('Monitoring Status')
                             .setDescription(monitorlist)
                             .setColor(client.theme.Neutral)
@@ -259,7 +259,7 @@ module.exports = {
                             let response = await helper.createEmbedResponse(`:x: The channel given does not exist`, client.theme.Fail);
                             return message.channel.send({ embeds: [response] });
                         }
-                        if (channel.type !== "GUILD_VOICE") {
+                        if (!channel.isVoiceBased) {
                             let response = await helper.createEmbedResponse(`:x: The channel given is not a voice channel`, client.theme.Fail);
                             return message.channel.send({ embeds: [response] });
                         }
@@ -281,7 +281,7 @@ module.exports = {
                         else active = ":x:";
                         if (monitoredChannel.busy) busy = ":white_check_mark:";
                         else busy = ":x:";
-                        const msg = new MessageEmbed()
+                        const msg = new EmbedBuilder()
                             .setTitle(`〖${monitoredChannel._id}〗${monitoredChannel.channelName}`)
                             .setColor(client.theme.Neutral)
                             .setDescription(members)

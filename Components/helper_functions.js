@@ -1,16 +1,16 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     noPermission: `<a:gigachad:944054257227825152> No`,
     dbError: `:x: Something went wrong. Please contact <@${process.env.OWNER_ID}>`,
     createEmbedResponse: async (message, color) => {
-        const embedMsg = new MessageEmbed()
+        const embedMsg = new EmbedBuilder()
             .setDescription(message)
             .setColor(color);
         return embedMsg;
     },
     createEmbedResponseAndSend: async (message, color, channel) => {
-        const embedMsg = new MessageEmbed()
+        const embedMsg = new EmbedBuilder()
             .setDescription(message)
             .setColor(color);
         await channel.send({ embeds: [embedMsg] });
@@ -26,7 +26,7 @@ module.exports = {
     },
     reportCommandError: (error, color, message, cmd) => {
         console.error(`The command [${cmd}] has failed with an error of...\n`, error);
-        const msg = new MessageEmbed()
+        const msg = new EmbedBuilder()
             .setDescription(`Kati epien skata. <@${process.env.OWNER_ID}> ela sastaaa.`)
             .setColor(color)
         message.channel.send({ embeds: [msg] });
