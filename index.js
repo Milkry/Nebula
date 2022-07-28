@@ -10,10 +10,10 @@ const Database = require("./Database/Database.js");
 
 ///////////////////////// Variables //////////////////////////
 const theme = {
-	Neutral: "#bf52ff",
-	Success: "#7aff14",
-	Fail: "#ff1428",
-	Notification: "#fcba03"
+	Neutral: [191, 82, 255],
+	Success: [122, 255, 20],
+	Fail: [255, 20, 40],
+	Notification: [252, 186, 3],
 }
 //////////////////////////////////////////////////////////////
 
